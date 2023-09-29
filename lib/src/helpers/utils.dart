@@ -2,7 +2,7 @@ import 'package:epub_view/src/data/models/paragraph.dart';
 import 'package:html/dom.dart';
 
 Duration countReadDurationOfParagraph(Paragraph paragraph) {
-  final symbolsInParagraph = countWordsInParagraph(paragraph);
+  final symbolsInParagraph = paragraph.wordsCount;
   const symbolsPerSecond = 25;
   final normalReadSeconds = symbolsInParagraph / symbolsPerSecond;
   const coef = 0.1;
@@ -11,8 +11,43 @@ Duration countReadDurationOfParagraph(Paragraph paragraph) {
   return Duration(milliseconds: coedReadMilliseconds.round());
 }
 
-int countWordsInParagraph(Paragraph paragraph) {
-  return getWordCountsInNodeList(paragraph.element.nodes);
+int countWordsInElement(Element element) {
+  return getWordCountsInNodeList(element.nodes);
+}
+
+double countUserProgress(
+  List<Paragraph> paragraphs, {
+  required int chapterNumber,
+  required int paragraphNumber,
+}) {
+  double allSymbols = 0;
+  double readSymbols = 0;
+  for (int i = 0; i < paragraphs.length; i++) {
+    final paragraph = paragraphs[i];
+    allSymbols += paragraph.wordsCount;
+    if (paragraph.chapterIndex <= chapterNumber && i < paragraphNumber) {
+      readSymbols += paragraph.wordsCount;
+    } else if (paragraph.chapterIndex == chapterNumber &&
+        i == paragraphNumber) {
+      readSymbols += paragraph.wordsCount * paragraph.percent;
+    }
+  }
+  final readPercent = readSymbols / allSymbols;
+  return readPercent;
+}
+
+double countRealProgress(List<Paragraph> paragraphs) {
+  double allSymbols = 0;
+  double readSymbols = 0;
+  for (int i = 0; i < paragraphs.length; i++) {
+    final paragraph = paragraphs[i];
+    allSymbols += paragraph.wordsCount;
+
+    readSymbols += paragraph.wordsCount * paragraph.percent;
+  }
+
+  final readPercent = readSymbols / allSymbols;
+  return readPercent;
 }
 
 int getWordCountsInNode(Node node) {

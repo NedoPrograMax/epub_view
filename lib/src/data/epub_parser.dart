@@ -1,4 +1,5 @@
 import 'package:epub_view/src/data/epub_cfi_reader.dart';
+import 'package:epub_view/src/helpers/utils.dart';
 import 'package:html/dom.dart' as dom;
 
 import 'models/paragraph.dart';
@@ -60,6 +61,7 @@ ParseParagraphsResult parseParagraphs(
               element: element,
               chapterIndex: chapterIndexes.length - 1,
               percent: 0,
+              wordsCount: countWordsInElement(element),
             ),
           ),
         );
@@ -78,6 +80,7 @@ ParseParagraphsResult parseParagraphs(
                 element: element,
                 chapterIndex: chapterIndexes.length - 1,
                 percent: 0,
+                wordsCount: countWordsInElement(element),
               ),
             ),
           );
@@ -91,6 +94,7 @@ ParseParagraphsResult parseParagraphs(
               element: element,
               chapterIndex: chapterIndexes.length - 1,
               percent: 0,
+              wordsCount: countWordsInElement(element),
             ),
           ),
         );

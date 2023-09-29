@@ -8,6 +8,9 @@ import 'package:epub_view/src/data/epub_parser.dart';
 import 'package:epub_view/src/data/models/chapter.dart';
 import 'package:epub_view/src/data/models/chapter_view_value.dart';
 import 'package:epub_view/src/data/models/paragraph.dart';
+import 'package:epub_view/src/data/models/reader_result.dart';
+import 'package:epub_view/src/data/repository.dart';
+import 'package:epub_view/src/helpers/extensions.dart';
 import 'package:epub_view/src/helpers/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -67,6 +70,7 @@ class _EpubViewState extends State<EpubView> {
   DateTime paragraphStart = DateTime.now();
   DateTime lastChange = DateTime.now();
   Duration paragraphDuration = Duration.zero;
+  late final Repository repository;
 
   EpubController get _controller => widget.controller;
 
@@ -92,6 +96,10 @@ class _EpubViewState extends State<EpubView> {
         setState(() {});
       }
     });
+    repository = Repository(
+      onSave: _controller.onSave,
+      lastReadResult: _controller.lastResult,
+    );
   }
 
   @override
@@ -123,9 +131,16 @@ class _EpubViewState extends State<EpubView> {
   }
 
   void _changeListener() {
+    final result = countResult();
+    if (result != null) {
+      repository.addData(result);
+    }
+  }
+
+  ReaderResult? countResult() {
     if (_paragraphs.isEmpty ||
         _itemPositionListener!.itemPositions.value.isEmpty) {
-      return;
+      return null;
     }
 
     final position = _itemPositionListener!.itemPositions.value.first;
@@ -139,11 +154,12 @@ class _EpubViewState extends State<EpubView> {
       trailingEdge: position.itemTrailingEdge,
       leadingEdge: position.itemLeadingEdge,
     );
-    final paragraph = _paragraphs[_getAbsParagraphIndexBy(
+    final paragraphAbsIndex = _getAbsParagraphIndexBy(
       positionIndex: position.index,
       trailingEdge: position.itemTrailingEdge,
       leadingEdge: position.itemLeadingEdge,
-    )];
+    );
+    final paragraph = _paragraphs[paragraphAbsIndex];
     final isTheSameParagraph =
         _currentValue?.chapterNumber == chapterIndex + 1 &&
             _currentValue?.paragraphNumber == paragraphIndex + 1;
@@ -176,6 +192,7 @@ class _EpubViewState extends State<EpubView> {
     widget.onChapterChanged?.call(_currentValue);
 
     lastChange = DateTime.now();
+    return null;
   }
 
   void _gotoEpubCfi(

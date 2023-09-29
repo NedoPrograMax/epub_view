@@ -3,10 +3,15 @@ part of 'ui/epub_view.dart';
 class EpubController {
   EpubController({
     required this.document,
+    required this.lastResult,
+    required this.onSave,
     this.epubCfi,
   });
 
   Future<EpubBook> document;
+  final Function(ReaderResult result) onSave;
+  final ReaderResult lastResult;
+
   final String? epubCfi;
 
   _EpubViewState? _epubViewState;
@@ -93,6 +98,8 @@ class EpubController {
       },
     );
   }
+
+  ReaderResult? getReaderResult() => _epubViewState?.countResult();
 
   Future<void> loadDocument(Future<EpubBook> document) {
     this.document = document;
