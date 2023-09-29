@@ -168,7 +168,7 @@ class _EpubViewState extends State<EpubView> {
         ? timePercent
         : min(1.0, paragraph.percent + timePercent);
 
-    final currentPercent = _currentValue?.progress ?? 0;
+    final currentPercent = (_currentValue?.progress ?? 0.0) / 100.0;
     final currentPercentWithTime = min(realTimePercent, currentPercent);
     paragraph.percent = max(paragraph.percent, currentPercentWithTime);
 
