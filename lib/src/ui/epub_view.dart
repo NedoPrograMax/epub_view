@@ -192,7 +192,20 @@ class _EpubViewState extends State<EpubView> {
     widget.onChapterChanged?.call(_currentValue);
 
     lastChange = DateTime.now();
-    return null;
+
+    return ReaderResult(
+      lastPlace: paragraph.toLastPlace(paragraphAbsIndex),
+      chapters: _paragraphs.toLastModels(),
+      lastProgress: countUserProgress(
+        _paragraphs,
+        chapterNumber: chapterIndex,
+        paragraphNumber: paragraphIndex,
+      ),
+      realProgress: countRealProgress(
+        _paragraphs,
+      ),
+      cfi: _controller.generateEpubCfi() ?? "",
+    );
   }
 
   void _gotoEpubCfi(
