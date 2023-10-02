@@ -203,8 +203,12 @@ class _EpubViewState extends State<EpubView> {
       ),
       repository.lastReadResult.lastProgress,
     );
+    final firstItem = _itemPositionListener?.itemPositions.value.first;
+    final aligment = -currentPercent *
+        ((firstItem?.itemLeadingEdge ?? 0).abs() +
+            (firstItem?.itemTrailingEdge ?? 0).abs());
     final countedLastPlace = LastPlaceModel(
-      percent: currentPercent,
+      percent: aligment,
       index: paragraphAbsIndex,
     );
     final lastPlace =
