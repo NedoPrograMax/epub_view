@@ -7,6 +7,7 @@ import 'package:epub_view/src/data/epub_cfi_reader.dart';
 import 'package:epub_view/src/data/epub_parser.dart';
 import 'package:epub_view/src/data/models/chapter.dart';
 import 'package:epub_view/src/data/models/chapter_view_value.dart';
+import 'package:epub_view/src/data/models/last_place_model.dart';
 import 'package:epub_view/src/data/models/paragraph.dart';
 import 'package:epub_view/src/data/models/reader_result.dart';
 import 'package:epub_view/src/data/repository.dart';
@@ -202,9 +203,17 @@ class _EpubViewState extends State<EpubView> {
       ),
       repository.lastReadResult.lastProgress,
     );
+    final countedLastPlace = LastPlaceModel(
+      percent: currentPercent,
+      index: paragraphAbsIndex,
+    );
+    final lastPlace =
+        countedLastPlace.isAfter(repository.lastReadResult.lastPlace)
+            ? countedLastPlace
+            : repository.lastReadResult.lastPlace;
 
     return ReaderResult(
-      lastPlace: paragraph.toLastPlace(paragraphAbsIndex),
+      lastPlace: lastPlace,
       chapters: _paragraphs.toLastModels(),
       lastProgress: userProgress,
       realProgress: countRealProgress(

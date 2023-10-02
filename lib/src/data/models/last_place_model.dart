@@ -7,13 +7,28 @@ class LastPlaceModel {
     required this.index,
   });
 
+  bool isAfter(LastPlaceModel other) {
+    if (index != null &&
+        other.index != null &&
+        percent != null &&
+        other.percent != null) {
+      if (index! < other.index!) {
+        return false;
+      } else if (index == other.index && percent! < other.percent!) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+    return false;
+  }
+
   LastPlaceModel copyWith({
-    String? chapterTitle,
-    int? chapterIndex,
-    double? chapterPercent,
+    int? index,
+    double? percent,
   }) =>
       LastPlaceModel(
-        percent: chapterPercent ?? percent,
-        index: chapterIndex ?? index,
+        percent: percent ?? percent,
+        index: index ?? index,
       );
 }
