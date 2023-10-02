@@ -16,6 +16,6 @@ class Paragraph {
 
   LastPlaceModel toLastPlace(int index) => LastPlaceModel(
         percent: percent,
-        index: index,
+        index: index + 1,
       );
 }
