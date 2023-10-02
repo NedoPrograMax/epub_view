@@ -19,6 +19,7 @@ double countUserProgress(
   List<Paragraph> paragraphs, {
   required int chapterNumber,
   required int paragraphNumber,
+  required double lastPercent,
 }) {
   double allSymbols = 0;
   double readSymbols = 0;
@@ -31,7 +32,7 @@ double countUserProgress(
       if (i < paragraphNumber) {
         readSymbols += paragraph.wordsCount;
       } else if (i == paragraphNumber) {
-        readSymbols += paragraph.wordsCount * paragraph.percent;
+        readSymbols += paragraph.wordsCount * lastPercent;
       }
     }
   }

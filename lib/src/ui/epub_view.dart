@@ -192,15 +192,20 @@ class _EpubViewState extends State<EpubView> {
     widget.onChapterChanged?.call(_currentValue);
 
     lastChange = DateTime.now();
+    final userProgress = max(
+      countUserProgress(
+        _paragraphs,
+        chapterNumber: chapterIndex,
+        paragraphNumber: paragraphIndex,
+        lastPercent: currentPercent,
+      ),
+      repository.lastReadResult.lastProgress,
+    );
 
     return ReaderResult(
       lastPlace: paragraph.toLastPlace(paragraphAbsIndex),
       chapters: _paragraphs.toLastModels(),
-      lastProgress: countUserProgress(
-        _paragraphs,
-        chapterNumber: chapterIndex,
-        paragraphNumber: paragraphIndex,
-      ),
+      lastProgress: userProgress,
       realProgress: countRealProgress(
         _paragraphs,
       ),
