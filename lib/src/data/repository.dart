@@ -19,6 +19,7 @@ class Repository {
   static const _debounceTime = Duration(seconds: 2);
 
   void addData(ReaderResult model) {
+    lastReadResult = model;
     _textStream.add(model);
   }
 

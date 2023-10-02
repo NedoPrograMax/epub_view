@@ -106,6 +106,7 @@ class _EpubViewState extends State<EpubView> {
   void dispose() {
     _itemPositionListener!.itemPositions.removeListener(_changeListener);
     _controller._detach();
+    repository.closeStream();
     super.dispose();
   }
 
