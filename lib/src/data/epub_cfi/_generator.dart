@@ -99,7 +99,7 @@ class EpubCfiGenerator {
         index = i;
         break;
       }
-      if (items[i].IdRef!.contains(edRef!)) {
+      if (edRef!.contains(items[i].IdRef!)) {
         partIndex = i;
       }
     }
