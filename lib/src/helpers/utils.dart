@@ -25,11 +25,14 @@ double countUserProgress(
   for (int i = 0; i < paragraphs.length; i++) {
     final paragraph = paragraphs[i];
     allSymbols += paragraph.wordsCount;
-    if (paragraph.chapterIndex <= chapterNumber && i < paragraphNumber) {
+    if (paragraph.chapterIndex < chapterNumber) {
       readSymbols += paragraph.wordsCount;
-    } else if (paragraph.chapterIndex == chapterNumber &&
-        i == paragraphNumber) {
-      readSymbols += paragraph.wordsCount * paragraph.percent;
+    } else if (paragraph.chapterIndex == chapterNumber) {
+      if (i < paragraphNumber) {
+        readSymbols += paragraph.wordsCount;
+      } else if (i == paragraphNumber) {
+        readSymbols += paragraph.wordsCount * paragraph.percent;
+      }
     }
   }
   final readPercent = readSymbols / allSymbols;
