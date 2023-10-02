@@ -119,6 +119,7 @@ class _EpubViewState extends State<EpubView> {
     final parseParagraphsResult =
         parseParagraphs(_chapters, _controller._document!.Content);
     _paragraphs = parseParagraphsResult.flatParagraphs;
+    _syncParagraphs();
     _chapterIndexes.addAll(parseParagraphsResult.chapterIndexes);
 
     _epubCfiReader = EpubCfiReader.parser(
@@ -130,6 +131,14 @@ class _EpubViewState extends State<EpubView> {
     _controller.isBookLoaded.value = true;
 
     return true;
+  }
+
+  void _syncParagraphs() {
+    final lastParagraphs = _controller.lastResult.chapters;
+    for (var lastParagraph in lastParagraphs) {
+      _paragraphs[(lastParagraph.index ?? 0)].percent =
+          lastParagraph.percent ?? 0;
+    }
   }
 
   void _changeListener() {
@@ -218,7 +227,7 @@ class _EpubViewState extends State<EpubView> {
 
     return ReaderResult(
       lastPlace: lastPlace,
-      chapters: _paragraphs.toLastModels(),
+      chapters: _paragraphs.removeZeros().toLastModels(),
       lastProgress: userProgress,
       realProgress: countRealProgress(
         _paragraphs,
