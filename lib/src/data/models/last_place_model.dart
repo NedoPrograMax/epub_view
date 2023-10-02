@@ -12,9 +12,11 @@ class LastPlaceModel {
         other.index != null &&
         percent != null &&
         other.percent != null) {
+      final absPercent = percent!.abs();
+      final otherAbsPercent = other.percent!.abs();
       if (index! < other.index!) {
         return false;
-      } else if (index == other.index && percent! < other.percent!) {
+      } else if (index == other.index && absPercent < otherAbsPercent) {
         return false;
       } else {
         return true;
