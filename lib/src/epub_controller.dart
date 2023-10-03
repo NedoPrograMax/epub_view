@@ -129,10 +129,12 @@ class EpubController {
     }
   }
 
-  int _getChapterStartIndex(int index) =>
-      index < _epubViewState!._chapterIndexes.length
-          ? _epubViewState!._chapterIndexes[index]
-          : 0;
+  int _getChapterStartIndex(int index) {
+    final startIndex = index < _epubViewState!._chapterIndexes.length
+        ? _epubViewState!._chapterIndexes[index]
+        : 0;
+    return startIndex;
+  }
 
   void _attach(_EpubViewState epubReaderViewState) {
     _epubViewState = epubReaderViewState;
