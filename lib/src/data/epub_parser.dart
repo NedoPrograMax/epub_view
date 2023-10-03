@@ -87,7 +87,7 @@ ParseParagraphsResult parseParagraphs(
           return acc;
         }
 
-        chapterIndexes.add(index);
+        chapterIndexes.add(index + acc.length);
         acc.addAll(
           elmList.map(
             (element) => Paragraph(
