@@ -37,14 +37,14 @@ ParseParagraphsResult parseParagraphs(
   List<EpubChapter> chapters,
   EpubContent? content,
 ) {
-  String? filename = '';
+  int? hashcode = 0;
   final List<int> chapterIndexes = [];
   final paragraphs = chapters.fold<List<Paragraph>>(
     [],
     (acc, next) {
       List<dom.Element> elmList = [];
-      if (filename != next.ContentFileName) {
-        filename = next.ContentFileName;
+      if (hashcode != next.hashCode) {
+        hashcode = next.hashCode;
         final document = EpubCfiReader().chapterDocument(next);
         if (document != null) {
           final result = convertDocumentToElements(document);
