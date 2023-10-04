@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:epub_view/src/data/epub_cfi_reader.dart';
@@ -13,6 +12,7 @@ import 'package:epub_view/src/data/models/reader_result.dart';
 import 'package:epub_view/src/data/repository.dart';
 import 'package:epub_view/src/helpers/extensions.dart';
 import 'package:epub_view/src/helpers/utils.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -80,7 +80,7 @@ class _EpubViewState extends State<EpubView> {
     super.initState();
     _itemScrollController = ItemScrollController();
     _itemPositionListener = ItemPositionsListener.create();
-    //  _controller._attach(this);
+    _controller._attach(this);
     _controller.loadingState.addListener(() {
       switch (_controller.loadingState.value) {
         case EpubViewLoadingState.loading:
@@ -116,8 +116,8 @@ class _EpubViewState extends State<EpubView> {
       return true;
     }
     _chapters = parseChapters(_controller._document!);
-    final parseParagraphsResult =
-        parseParagraphs(_chapters, _controller._document!.Content);
+
+    final parseParagraphsResult = await compute(parseParagraphs, _chapters);
     _paragraphs = parseParagraphsResult.flatParagraphs;
     _syncParagraphs();
     _chapterIndexes.addAll(parseParagraphsResult.chapterIndexes);

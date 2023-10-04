@@ -35,7 +35,6 @@ List<dom.Element> _removeAllDiv(List<dom.Element> elements) {
 
 ParseParagraphsResult parseParagraphs(
   List<EpubChapter> chapters,
-  EpubContent? content,
 ) {
   int? hashcode = 0;
   final List<int> chapterIndexes = [];
