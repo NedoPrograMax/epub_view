@@ -6,6 +6,7 @@ class EpubViewTableOfContents extends StatelessWidget {
   const EpubViewTableOfContents({
     required this.controller,
     this.padding,
+    this.onScrollStarted,
     this.itemBuilder,
     this.loader,
     Key? key,
@@ -13,6 +14,7 @@ class EpubViewTableOfContents extends StatelessWidget {
 
   final EdgeInsetsGeometry? padding;
   final EpubController controller;
+  final VoidCallback? onScrollStarted;
 
   final Widget Function(
     BuildContext context,
@@ -37,8 +39,12 @@ class EpubViewTableOfContents extends StatelessWidget {
                   itemBuilder?.call(context, index, data[index], data.length) ??
                   ListTile(
                     title: Text(data[index].title!.trim()),
-                    onTap: () =>
-                        controller.scrollTo(index: data[index].startIndex),
+                    onTap: () {
+                      if (onScrollStarted != null) {
+                        onScrollStarted!();
+                      }
+                      controller.scrollTo(index: data[index].startIndex);
+                    },
                   ),
               itemCount: data.length,
             );
