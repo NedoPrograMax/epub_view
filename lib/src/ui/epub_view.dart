@@ -80,7 +80,7 @@ class _EpubViewState extends State<EpubView> {
     super.initState();
     _itemScrollController = ItemScrollController();
     _itemPositionListener = ItemPositionsListener.create();
-    _controller._attach(this);
+    //  _controller._attach(this);
     _controller.loadingState.addListener(() {
       switch (_controller.loadingState.value) {
         case EpubViewLoadingState.loading:
