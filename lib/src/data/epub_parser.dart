@@ -12,7 +12,7 @@ List<EpubChapter> parseChapters(EpubBook epubBook) =>
       [],
       (acc, next) {
         acc.add(next);
-        next.SubChapters!.forEach(acc.add);
+        next.SubChapters?.forEach(acc.add);
         return acc;
       },
     );

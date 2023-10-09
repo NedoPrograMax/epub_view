@@ -18,9 +18,10 @@ extension EpubBookExtension on EpubBook {
     List<EpubChapter> chapters = [...(Chapters ?? [])];
     if (chapters.isEmpty) {
       chapters = Content?.Html?.values
-              .map((e) => EpubChapter()
+              .mapIndexed((i, e) => EpubChapter()
                 ..HtmlContent = e.Content
-                ..ContentFileName = e.FileName)
+                ..ContentFileName = e.FileName
+                ..Title = "Глава $i")
               .toList() ??
           [];
     }

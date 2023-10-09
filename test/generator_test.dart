@@ -115,7 +115,7 @@ void main() {
 
   test('generateCompleteCFI success', () async {
     final document = EpubCfiReader()
-        .chapterDocument(_book.getRealChaptersOrCreated()[0].SubChapters![1])!;
+        .chapterDocument(_book.getRealChaptersOrCreated()[0].SubChapters?[1])!;
     final node = document.getElementsByTagName('p')[2];
 
     final packageDocumentCFIComponent = EpubCfiGenerator()
