@@ -104,7 +104,8 @@ void main() {
   });
 
   test('generateElementCFIComponent success', () async {
-    final document = EpubCfiReader().chapterDocument(_book.Chapters![0])!;
+    final document =
+        EpubCfiReader().chapterDocument(_book.getRealChaptersOrCreated()[0])!;
     final node = document.getElementsByTagName('p')[3];
 
     final result = EpubCfiGenerator().generateElementCFIComponent(node);
@@ -113,8 +114,8 @@ void main() {
   });
 
   test('generateCompleteCFI success', () async {
-    final document =
-        EpubCfiReader().chapterDocument(_book.Chapters![0].SubChapters![1])!;
+    final document = EpubCfiReader()
+        .chapterDocument(_book.getRealChaptersOrCreated()[0].SubChapters![1])!;
     final node = document.getElementsByTagName('p')[2];
 
     final packageDocumentCFIComponent = EpubCfiGenerator()

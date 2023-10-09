@@ -84,7 +84,7 @@ class EpubController {
     int index = -1;
 
     return _cacheTableOfContents =
-        _document!.Chapters!.fold<List<EpubViewChapter>>(
+        _document!.getRealChaptersOrCreated().fold<List<EpubViewChapter>>(
       [],
       (acc, next) {
         index += 1;

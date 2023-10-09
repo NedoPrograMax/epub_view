@@ -1,4 +1,5 @@
 import 'package:epub_view/src/data/epub_cfi_reader.dart';
+import 'package:epub_view/src/helpers/extensions.dart';
 import 'package:epub_view/src/helpers/utils.dart';
 import 'package:html/dom.dart' as dom;
 
@@ -7,7 +8,7 @@ import 'models/paragraph.dart';
 export 'package:epubx/epubx.dart' hide Image;
 
 List<EpubChapter> parseChapters(EpubBook epubBook) =>
-    epubBook.Chapters!.fold<List<EpubChapter>>(
+    epubBook.getRealChaptersOrCreated().fold<List<EpubChapter>>(
       [],
       (acc, next) {
         acc.add(next);

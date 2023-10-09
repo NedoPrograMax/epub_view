@@ -117,14 +117,6 @@ class _EpubViewState extends State<EpubView> {
     }
     _chapters = parseChapters(_controller._document!);
 
-    if (_chapters.isEmpty) {
-      _chapters = _controller._document?.Content?.Html?.values
-              .map((e) => EpubChapter()
-                ..HtmlContent = e.Content
-                ..ContentFileName = e.FileName)
-              .toList() ??
-          [];
-    }
     final parseParagraphsResult = await compute(parseParagraphs, _chapters);
     _paragraphs = parseParagraphsResult.flatParagraphs;
     _syncParagraphs();

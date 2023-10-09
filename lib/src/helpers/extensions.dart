@@ -1,5 +1,5 @@
 import 'package:collection/collection.dart';
-import 'package:epub_view/src/data/models/last_place_model.dart';
+import 'package:epub_view/epub_view.dart';
 import 'package:epub_view/src/data/models/paragraph.dart';
 
 extension ParagraphsExtension on List<Paragraph> {
@@ -10,5 +10,20 @@ extension ParagraphsExtension on List<Paragraph> {
     final newList = [...this];
     newList.removeWhere((element) => element.percent == 0);
     return newList;
+  }
+}
+
+extension EpubBookExtension on EpubBook {
+  List<EpubChapter> getRealChaptersOrCreated() {
+    List<EpubChapter> chapters = [...(Chapters ?? [])];
+    if (chapters.isEmpty) {
+      chapters = Content?.Html?.values
+              .map((e) => EpubChapter()
+                ..HtmlContent = e.Content
+                ..ContentFileName = e.FileName)
+              .toList() ??
+          [];
+    }
+    return chapters;
   }
 }
