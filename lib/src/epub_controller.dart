@@ -89,7 +89,7 @@ class EpubController {
       (acc, next) {
         index += 1;
         acc.add(EpubViewChapter(next.Title, _getChapterStartIndex(index)));
-        for (final subChapter in next.SubChapters!) {
+        for (final subChapter in next.SubChapters ?? []) {
           index += 1;
           acc.add(EpubViewSubChapter(
               subChapter.Title, _getChapterStartIndex(index)));
