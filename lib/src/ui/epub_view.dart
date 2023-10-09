@@ -429,20 +429,20 @@ class _EpubViewState extends State<EpubView> {
 
     return Column(
       children: <Widget>[
-        if (chapterIndex >= 0 && paragraphIndex == 0)
-          builders.chapterDividerBuilder(chapters[chapterIndex]),
+        //  if (chapterIndex >= 0 && paragraphIndex == 0)
+        //    builders.chapterDividerBuilder(chapters[chapterIndex]),
         Html(
           data: paragraphs[index].element.outerHtml,
           onLinkTap: (href, _, __) => onExternalLinkPressed(href!),
-          style: const {
-            /*  'html': Style(
+          style: {
+            'html': Style(
               padding: HtmlPaddings.only(
                 top: (options.paragraphPadding as EdgeInsets?)?.top,
                 right: (options.paragraphPadding as EdgeInsets?)?.right,
                 bottom: (options.paragraphPadding as EdgeInsets?)?.bottom,
                 left: (options.paragraphPadding as EdgeInsets?)?.left,
               ),
-            ).merge(Style.fromTextStyle(options.textStyle)), */
+            ).merge(Style.fromTextStyle(options.textStyle)),
           },
           extensions: [
             TagExtension(
