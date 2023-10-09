@@ -457,17 +457,6 @@ class _EpubViewState extends State<EpubView> {
                 );
               },
             ),
-            TagExtension(
-              tagsToExtend: {"p"},
-              builder: (extensionContext) {
-                return Text(
-                  extensionContext.element!.text,
-                  style: const TextStyle(
-                    fontSize: 12,
-                  ),
-                );
-              },
-            ),
           ],
         ),
       ],
