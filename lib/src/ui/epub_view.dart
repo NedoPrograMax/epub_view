@@ -434,15 +434,15 @@ class _EpubViewState extends State<EpubView> {
         Html(
           data: paragraphs[index].element.outerHtml,
           onLinkTap: (href, _, __) => onExternalLinkPressed(href!),
-          style: {
-            'html': Style(
+          style: const {
+            /*  'html': Style(
               padding: HtmlPaddings.only(
                 top: (options.paragraphPadding as EdgeInsets?)?.top,
                 right: (options.paragraphPadding as EdgeInsets?)?.right,
                 bottom: (options.paragraphPadding as EdgeInsets?)?.bottom,
                 left: (options.paragraphPadding as EdgeInsets?)?.left,
               ),
-            ).merge(Style.fromTextStyle(options.textStyle)),
+            ).merge(Style.fromTextStyle(options.textStyle)), */
           },
           extensions: [
             TagExtension(
@@ -467,7 +467,7 @@ class _EpubViewState extends State<EpubView> {
     return ScrollablePositionedList.builder(
       shrinkWrap: widget.shrinkWrap,
       initialScrollIndex: (_controller.lastResult.lastPlace.index ?? 1) - 1,
-      initialAlignment: -(_controller.lastResult.lastPlace.percent ?? 0),
+      initialAlignment: -(_controller.lastResult.lastPlace.percent ?? 0) - 0.01,
       itemCount: _paragraphs.length,
       itemScrollController: _itemScrollController,
       itemPositionsListener: _itemPositionListener,
@@ -530,12 +530,14 @@ class _EpubViewState extends State<EpubView> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.builders.builder(
-      context,
-      widget.builders,
-      _controller.loadingState.value,
-      _buildLoaded,
-      _loadingError,
+    return SelectionArea(
+      child: widget.builders.builder(
+        context,
+        widget.builders,
+        _controller.loadingState.value,
+        _buildLoaded,
+        _loadingError,
+      ),
     );
   }
 }
