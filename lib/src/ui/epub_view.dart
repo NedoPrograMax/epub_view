@@ -429,8 +429,8 @@ class _EpubViewState extends State<EpubView> {
 
     return Column(
       children: <Widget>[
-        //  if (chapterIndex >= 0 && paragraphIndex == 0)
-        //    builders.chapterDividerBuilder(chapters[chapterIndex]),
+        if (chapterIndex >= 0 && paragraphIndex == 0)
+          builders.chapterDividerBuilder(chapters[chapterIndex]),
         Html(
           data: paragraphs[index].element.outerHtml,
           onLinkTap: (href, _, __) => onExternalLinkPressed(href!),
@@ -454,6 +454,17 @@ class _EpubViewState extends State<EpubView> {
                     document.Content!.Images![url]!.Content!);
                 return Image(
                   image: MemoryImage(content),
+                );
+              },
+            ),
+            TagExtension(
+              tagsToExtend: {"p"},
+              builder: (extensionContext) {
+                return Text(
+                  extensionContext.element!.text,
+                  style: const TextStyle(
+                    fontSize: 12,
+                  ),
                 );
               },
             ),
