@@ -44,7 +44,7 @@ ParseParagraphsResult parseParagraphs(
       List<dom.Element> elmList = [];
       if (hashcode != next.hashCode) {
         hashcode = next.hashCode;
-        final document = EpubCfiReader().chapterDocument(next);
+        final document = EpubCfiReader().chapterDocument(next.HtmlContent);
         if (document != null) {
           final result = convertDocumentToElements(document);
           elmList = _removeAllDiv(result);

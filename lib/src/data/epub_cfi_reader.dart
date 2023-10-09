@@ -53,7 +53,7 @@ class EpubCfiReader {
     final int chapterIndex =
         _getChapterIndexBy(cfiStep: cfiFragment.path!.localPath!.steps!.first)!;
     final chapter = chapters[chapterIndex];
-    final document = chapterDocument(chapter);
+    final document = chapterDocument(chapter.HtmlContent);
     if (document == null) {
       return null;
     }
@@ -74,7 +74,7 @@ class EpubCfiReader {
     if (book == null || chapter == null) {
       return null;
     }
-    final document = chapterDocument(chapter);
+    final document = chapterDocument(chapter.HtmlContent);
     if (document == null) {
       return null;
     }
@@ -130,11 +130,11 @@ class EpubCfiReader {
     ]);
   }
 
-  dom.Document? chapterDocument(EpubChapter? chapter) {
-    if (chapter == null) {
+  dom.Document? chapterDocument(String? chapterContent) {
+    if (chapterContent == null) {
       return null;
     }
-    final html = chapter.HtmlContent!.replaceAllMapped(
+    final html = chapterContent.replaceAllMapped(
         RegExp(r'<\s*([^\s>]+)([^>]*)\/\s*>'),
         (match) => '<${match.group(1)}${match.group(2)}></${match.group(1)}>');
     final regExp = RegExp(
