@@ -21,10 +21,12 @@ extension EpubBookExtension on EpubBook {
               .mapIndexed((i, e) => EpubChapter()
                 ..HtmlContent = e.Content
                 ..ContentFileName = e.FileName
-                ..Title = "Глава $i")
+                ..Title = "Глава ${i + 1}")
               .toList() ??
           [];
     }
+    chapters.removeWhere((element) =>
+        element.ContentFileName?.toLowerCase().startsWith("cover") ?? false);
     return chapters;
   }
 }
