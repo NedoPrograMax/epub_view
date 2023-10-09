@@ -119,10 +119,9 @@ class _EpubViewState extends State<EpubView> {
 
     if (_chapters.isEmpty) {
       _chapters = _controller._document?.Content?.Html?.values
-              .map((e) => EpubChapter(
-                    HtmlContent: e.Content,
-                    Title: e.FileName,
-                  ))
+              .map((e) => EpubChapter()
+                ..HtmlContent = e.Content
+                ..ContentFileName = e.FileName)
               .toList() ??
           [];
     }
