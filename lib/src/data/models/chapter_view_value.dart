@@ -9,12 +9,22 @@ class EpubChapterViewValue {
     required this.chapterNumber,
     required this.paragraphNumber,
     required this.position,
+    this.lastProgress,
   });
 
   final EpubChapter? chapter;
   final int chapterNumber;
   final int paragraphNumber;
   final ItemPosition position;
+  final double? lastProgress;
+  EpubChapterViewValue copyWith({required double lastProgress}) =>
+      EpubChapterViewValue(
+        chapter: chapter,
+        chapterNumber: chapterNumber,
+        paragraphNumber: paragraphNumber,
+        position: position,
+        lastProgress: lastProgress,
+      );
 
   /// Chapter view in percents
   double get progress {
