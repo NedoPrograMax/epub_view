@@ -17,7 +17,8 @@ class EpubViewBottomBar extends StatelessWidget {
       height: 56,
       decoration: const BoxDecoration(
         border: Border(
-          top: BorderSide(color: Color.fromARGB(1, 170, 160, 181), width: 0.5),
+          top:
+              BorderSide(color: Color.fromARGB(255, 170, 170, 181), width: 0.5),
         ),
       ),
       padding: const EdgeInsets.symmetric(
