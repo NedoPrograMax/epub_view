@@ -220,10 +220,10 @@ class _EpubViewState extends State<EpubView> {
       percent: aligment,
       index: paragraphAbsIndex + 1,
     );
-    final lastPlace =
-        countedLastPlace.isAfter(repository.lastReadResult.lastPlace)
-            ? countedLastPlace
-            : repository.lastReadResult.lastPlace;
+    final lastPlace = repository.lastReadResult.lastPlace == null ||
+            countedLastPlace.isAfter(repository.lastReadResult.lastPlace!)
+        ? countedLastPlace
+        : repository.lastReadResult.lastPlace;
 
     return ReaderResult(
       lastPlace: lastPlace,
@@ -466,8 +466,9 @@ class _EpubViewState extends State<EpubView> {
   Widget _buildLoaded(BuildContext context) {
     return ScrollablePositionedList.builder(
       shrinkWrap: widget.shrinkWrap,
-      initialScrollIndex: (_controller.lastResult.lastPlace.index ?? 1) - 1,
-      initialAlignment: -(_controller.lastResult.lastPlace.percent ?? 0) - 0.01,
+      initialScrollIndex: (_controller.lastResult.lastPlace?.index ?? 1) - 1,
+      initialAlignment:
+          -(_controller.lastResult.lastPlace?.percent ?? 0) - 0.01,
       itemCount: _paragraphs.length,
       itemScrollController: _itemScrollController,
       itemPositionsListener: _itemPositionListener,
