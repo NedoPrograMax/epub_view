@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:epub_view/src/data/epub_cfi_reader.dart';
 import 'package:epub_view/src/helpers/extensions.dart';
 import 'package:epub_view/src/helpers/utils.dart';
@@ -89,10 +90,12 @@ ParseParagraphsResult parseParagraphs(
 
         chapterIndexes.add(index + acc.length);
         acc.addAll(
-          elmList.map(
-            (element) => Paragraph(
+          elmList.mapIndexed(
+            (elementIndex, element) => Paragraph(
               element: element,
-              chapterIndex: chapterIndexes.length - 1,
+              chapterIndex: elementIndex < index
+                  ? chapterIndexes.length - 2
+                  : chapterIndexes.length - 1,
               percent: 0,
               wordsCount: countWordsInElement(element),
             ),
