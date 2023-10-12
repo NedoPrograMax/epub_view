@@ -77,9 +77,10 @@ double convertProgressToSmallModel(double progress) =>
     (progress / smallConversionNumber) + 1.0;
 
 double convertSmallModelToProgress(double model) {
-  final converted = (model - 1.0) * smallConversionNumber;
-  if (converted > smallConversionNumber / 10) {
-    return model;
+  if (model >= 0.95 && model <= 1.05) {
+    final converted = (model - 1.0) * smallConversionNumber;
+    return converted;
   }
-  return converted;
+
+  return model;
 }
