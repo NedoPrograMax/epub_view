@@ -7,7 +7,7 @@ extension ParagraphsExtension on List<Paragraph> {
     final newList =
         mapIndexed((index, paragraph) => paragraph.toLastPlace(index)).toList();
     if (newList.isEmpty) {
-      newList.add(const LastPlaceModel(percent: 0.01, index: 0));
+      newList.add(const LastPlaceModel(percent: 0.01, index: 1));
     }
     return newList;
   }
