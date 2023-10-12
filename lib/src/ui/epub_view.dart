@@ -220,7 +220,7 @@ class _EpubViewState extends State<EpubView> {
         ((firstItem?.itemLeadingEdge ?? 0).abs() +
             (firstItem?.itemTrailingEdge ?? 0).abs());
     final countedLastPlace = LastPlaceModel(
-      percent: aligment,
+      percent: position.itemLeadingEdge,
       index: paragraphAbsIndex + 1,
     );
     /*  final lastPlace = repository.lastReadResult.lastPlace == null ||
@@ -471,7 +471,7 @@ class _EpubViewState extends State<EpubView> {
       shrinkWrap: widget.shrinkWrap,
       initialScrollIndex: (_controller.lastResult.lastPlace?.index ?? 1) - 1,
       initialAlignment:
-          -(_controller.lastResult.lastPlace?.percent ?? 0) - 0.01,
+          -(_controller.lastResult.lastPlace?.percent ?? 0) - 0.001,
       itemCount: _paragraphs.length,
       itemScrollController: _itemScrollController,
       itemPositionsListener: _itemPositionListener,
