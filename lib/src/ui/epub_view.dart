@@ -221,7 +221,7 @@ class _EpubViewState extends State<EpubView> {
             (firstItem?.itemTrailingEdge ?? 0).abs());
     final countedLastPlace = LastPlaceModel(
       percent: position.itemLeadingEdge,
-      index: paragraphAbsIndex + 1,
+      index: position.index + 1,
     );
     /*  final lastPlace = repository.lastReadResult.lastPlace == null ||
             countedLastPlace.isAfter(repository.lastReadResult.lastPlace!)
