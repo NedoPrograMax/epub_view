@@ -223,13 +223,13 @@ class _EpubViewState extends State<EpubView> {
       percent: aligment,
       index: paragraphAbsIndex + 1,
     );
-    final lastPlace = repository.lastReadResult.lastPlace == null ||
+    /*  final lastPlace = repository.lastReadResult.lastPlace == null ||
             countedLastPlace.isAfter(repository.lastReadResult.lastPlace!)
         ? countedLastPlace
-        : repository.lastReadResult.lastPlace;
+        : repository.lastReadResult.lastPlace; */
 
     return ReaderResult(
-      lastPlace: lastPlace,
+      lastPlace: countedLastPlace,
       chapters: _paragraphs.removeZeros().toLastModels(),
       lastProgress: userProgress,
       realProgress: countRealProgress(

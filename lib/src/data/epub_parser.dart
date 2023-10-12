@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:collection/collection.dart';
 import 'package:epub_view/src/data/epub_cfi_reader.dart';
 import 'package:epub_view/src/helpers/extensions.dart';
@@ -94,7 +96,7 @@ ParseParagraphsResult parseParagraphs(
             (elementIndex, element) => Paragraph(
               element: element,
               chapterIndex: elementIndex < index
-                  ? chapterIndexes.length - 2
+                  ? max(chapterIndexes.length - 2, 0)
                   : chapterIndexes.length - 1,
               percent: 0,
               wordsCount: countWordsInElement(element),
