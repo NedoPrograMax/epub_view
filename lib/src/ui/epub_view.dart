@@ -206,10 +206,10 @@ class _EpubViewState extends State<EpubView> {
       paragraphNumber: paragraphAbsIndex,
       lastPercent: currentPercent,
     );
-    final userProgress = max(
+    /* final userProgress = max(
       countedProgress,
       repository.lastReadResult.lastProgress,
-    );
+    ); */
 
     _controller.currentValueListenable.value =
         _currentValue?.copyWith(lastProgress: countedProgress);
@@ -231,7 +231,7 @@ class _EpubViewState extends State<EpubView> {
     return ReaderResult(
       lastPlace: countedLastPlace,
       chapters: _paragraphs.removeZeros().toLastModels(),
-      lastProgress: userProgress,
+      lastProgress: countedProgress,
       realProgress: countRealProgress(
         _paragraphs,
       ),
