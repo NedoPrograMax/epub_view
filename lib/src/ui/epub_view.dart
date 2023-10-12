@@ -203,7 +203,7 @@ class _EpubViewState extends State<EpubView> {
     final countedProgress = countUserProgress(
       _paragraphs,
       chapterNumber: chapterIndex,
-      paragraphNumber: paragraphIndex,
+      paragraphNumber: paragraphAbsIndex,
       lastPercent: currentPercent,
     );
     final userProgress = max(
