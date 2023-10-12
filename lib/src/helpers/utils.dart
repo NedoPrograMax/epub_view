@@ -74,11 +74,11 @@ int getWordCountsInNodeList(NodeList nodeList) {
 
 const smallConversionNumber = 10000.0;
 double convertProgressToSmallModel(double progress) =>
-    (progress / smallConversionNumber) + 1.0;
+    (progress / smallConversionNumber) + 0.8;
 
 double convertSmallModelToProgress(double model) {
-  if (model >= 0.95 && model <= 1.05) {
-    final converted = (model - 1.0) * smallConversionNumber;
+  if (model >= 0.75 && model <= 0.85) {
+    final converted = (model - 0.8) * smallConversionNumber;
     return converted;
   }
 
