@@ -71,3 +71,10 @@ int getWordCountsInNodeList(NodeList nodeList) {
   }
   return wordCount;
 }
+
+const smallConversionNumber = 10000.0;
+double convertProgressToSmallModel(double progress) =>
+    (progress / smallConversionNumber) + 1.0;
+
+double convertSmallModelToProgress(double model) =>
+    (model - 1.0) * smallConversionNumber;
