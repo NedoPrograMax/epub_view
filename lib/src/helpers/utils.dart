@@ -76,5 +76,10 @@ const smallConversionNumber = 10000.0;
 double convertProgressToSmallModel(double progress) =>
     (progress / smallConversionNumber) + 1.0;
 
-double convertSmallModelToProgress(double model) =>
-    (model - 1.0) * smallConversionNumber;
+double convertSmallModelToProgress(double model) {
+  final converted = (model - 1.0) * smallConversionNumber;
+  if (converted > smallConversionNumber / 10) {
+    return model;
+  }
+  return converted;
+}
