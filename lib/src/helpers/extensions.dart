@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:epub_view/epub_view.dart';
 import 'package:epub_view/src/data/models/paragraph.dart';
+import 'package:html/dom.dart';
 
 extension ParagraphsExtension on List<Paragraph> {
   List<LastPlaceModel> toLastModels() =>
@@ -9,6 +10,11 @@ extension ParagraphsExtension on List<Paragraph> {
   List<Paragraph> removeZeros() {
     final newList = [...this];
     newList.removeWhere((element) => element.percent == 0);
+    if (newList.isEmpty) {
+      newList.add(
+        Paragraph(element: Element.html(""), chapterIndex: 1, percent: 0.001),
+      );
+    }
     return newList;
   }
 }

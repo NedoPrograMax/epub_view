@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:epub_view/src/data/models/paragraph.dart';
 import 'package:html/dom.dart';
 
@@ -51,7 +53,7 @@ double countRealProgress(List<Paragraph> paragraphs) {
   }
 
   final readPercent = readSymbols / allSymbols;
-  return readPercent;
+  return max(readPercent, 0.001);
 }
 
 int getWordCountsInNode(Node node) {
