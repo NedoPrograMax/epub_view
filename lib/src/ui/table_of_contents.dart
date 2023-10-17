@@ -35,9 +35,9 @@ class EpubViewTableOfContents extends StatelessWidget {
 
           if (data.isNotEmpty) {
             content = Padding(
-              padding: const EdgeInsets.only(
+              padding: EdgeInsets.only(
                 left: 12,
-                top: 24,
+                top: MediaQuery.of(context).padding.top + 4,
               ),
               child: Column(
                 children: [
