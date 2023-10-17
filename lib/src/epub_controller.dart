@@ -20,6 +20,8 @@ class EpubController {
 
   EpubChapterViewValue? get currentValue => _epubViewState?._currentValue;
 
+  EpubBook? getDocument() => _document;
+
   final isBookLoaded = ValueNotifier<bool>(false);
   final ValueNotifier<EpubViewLoadingState> loadingState =
       ValueNotifier(EpubViewLoadingState.loading);

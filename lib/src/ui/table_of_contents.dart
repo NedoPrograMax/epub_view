@@ -9,6 +9,7 @@ class EpubViewTableOfContents extends StatelessWidget {
     this.onScrollStarted,
     this.itemBuilder,
     this.loader,
+    this.titleBuilder,
     Key? key,
   }) : super(key: key);
 
@@ -23,6 +24,7 @@ class EpubViewTableOfContents extends StatelessWidget {
     int itemCount,
   )? itemBuilder;
   final Widget? loader;
+  final Widget Function(String title)? titleBuilder;
 
   @override
   Widget build(BuildContext context) =>
@@ -32,21 +34,37 @@ class EpubViewTableOfContents extends StatelessWidget {
           Widget content;
 
           if (data.isNotEmpty) {
-            content = ListView.builder(
-              padding: padding,
-              key: Key('$runtimeType.content'),
-              itemBuilder: (context, index) =>
-                  itemBuilder?.call(context, index, data[index], data.length) ??
-                  ListTile(
-                    title: Text(data[index].title!.trim()),
-                    onTap: () {
-                      if (onScrollStarted != null) {
-                        onScrollStarted!();
-                      }
-                      controller.scrollTo(index: data[index].startIndex);
-                    },
+            content = Column(
+              children: [
+                titleBuilder?.call(controller.getDocument()?.Title ?? "") ??
+                    Text(controller.getDocument()?.Title ?? ""),
+                const SizedBox(height: 6),
+                Expanded(
+                  child: ListView.builder(
+                    padding: padding,
+                    key: Key('$runtimeType.content'),
+                    itemBuilder: (context, index) => Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {
+                          if (onScrollStarted != null) {
+                            onScrollStarted!();
+                          }
+                          controller.scrollTo(index: data[index].startIndex);
+                        },
+                        child: Ink(
+                          child: itemBuilder?.call(
+                                  context, index, data[index], data.length) ??
+                              ListTile(
+                                title: Text(data[index].title!.trim()),
+                              ),
+                        ),
+                      ),
+                    ),
+                    itemCount: data.length,
                   ),
-              itemCount: data.length,
+                ),
+              ],
             );
           } else {
             content = KeyedSubtree(
@@ -58,7 +76,10 @@ class EpubViewTableOfContents extends StatelessWidget {
           return AnimatedSwitcher(
             duration: const Duration(milliseconds: 250),
             transitionBuilder: (Widget child, Animation<double> animation) =>
-                FadeTransition(opacity: animation, child: child),
+                FadeTransition(
+              opacity: animation,
+              child: child,
+            ),
             child: content,
           );
         },
