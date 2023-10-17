@@ -11,10 +11,12 @@ class ReaderTextSelectionToolbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final buttons = [...selectableRegionState.contextMenuButtonItems];
+    buttons.removeWhere(
+        (element) => element.type == ContextMenuButtonType.selectAll);
     return AdaptiveTextSelectionToolbar(
       anchors: selectableRegionState.contextMenuAnchors,
-      children: selectableRegionState.contextMenuButtonItems
-          .map((ContextMenuButtonItem buttonItem) {
+      children: buttons.map((ContextMenuButtonItem buttonItem) {
         return SelectionToolbarItem(
           text: CupertinoTextSelectionToolbarButton.getButtonLabel(
             context,

@@ -547,9 +547,6 @@ class _EpubViewState extends State<EpubView> {
   Widget build(BuildContext context) {
     return SelectionArea(
       contextMenuBuilder: (context, selectableRegionState) {
-        final buttons = [...selectableRegionState.contextMenuButtonItems];
-        buttons.removeWhere(
-            (element) => element.type == ContextMenuButtonType.selectAll);
         return ReaderTextSelectionToolbar(
             selectableRegionState: selectableRegionState);
       },
