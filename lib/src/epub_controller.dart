@@ -47,6 +47,20 @@ class EpubController {
         curve: curve,
       );
 
+  Future<void>? scrollToPercent({
+    required double percent,
+    Duration duration = const Duration(milliseconds: 250),
+    Curve curve = Curves.linear,
+  }) {
+    final lastPlace =
+        _epubViewState?._paragraphs.binarySearchForPlaceByPercent(percent);
+    return _epubViewState?.scrollToLastPlace(
+      lastPlace: lastPlace ?? const LastPlaceModel(percent: 0, index: 0),
+      duration: duration,
+      curve: curve,
+    );
+  }
+
   void gotoEpubCfi(
     String epubCfi, {
     double alignment = 0,

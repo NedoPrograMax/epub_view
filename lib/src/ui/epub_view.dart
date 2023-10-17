@@ -116,9 +116,10 @@ class _EpubViewState extends State<EpubView> {
     if (_controller.isBookLoaded.value) {
       return true;
     }
-    _chapters = parseChapters(_controller._document!);
+    _chapters = EpubParser.parseChapters(_controller._document!);
 
-    final parseParagraphsResult = await compute(parseParagraphs, _chapters);
+    final parseParagraphsResult =
+        await compute(EpubParser().parseParagraphs, _chapters);
     _paragraphs = parseParagraphsResult.flatParagraphs;
     _syncParagraphs();
     _chapterIndexes.addAll(parseParagraphsResult.chapterIndexes);
@@ -470,40 +471,37 @@ class _EpubViewState extends State<EpubView> {
   }
 
   Widget _buildLoaded(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 40),
-      child: MediaQuery.removePadding(
-        context: context,
-        removeTop: true,
-        removeBottom: true,
-        child: CupertinoScrollbar(
-          thickness: 8,
-          radius: const Radius.circular(4),
-          controller: _itemScrollController!.secondaryScrollController,
-          thumbVisibility: true,
-          child: ScrollablePositionedList.builder(
-            shrinkWrap: widget.shrinkWrap,
-            initialScrollIndex:
-                (_controller.lastResult.lastPlace?.index ?? 1) - 1,
-            initialAlignment: convertSmallModelToProgress(
-                _controller.lastResult.lastPlace?.percent ?? 0),
-            itemCount: _paragraphs.length,
-            itemScrollController: _itemScrollController,
-            itemPositionsListener: _itemPositionListener,
-            itemBuilder: (BuildContext context, int index) {
-              return widget.builders.chapterBuilder(
-                context,
-                widget.builders,
-                widget.controller._document!,
-                _chapters,
-                _paragraphs,
-                index,
-                _getChapterIndexBy(positionIndex: index),
-                _getParagraphIndexBy(positionIndex: index),
-                _onLinkPressed,
-              );
-            },
-          ),
+    return MediaQuery.removePadding(
+      context: context,
+      removeTop: true,
+      removeBottom: true,
+      child: CupertinoScrollbar(
+        thickness: 8,
+        radius: const Radius.circular(4),
+        controller: _itemScrollController!.secondaryScrollController,
+        thumbVisibility: true,
+        child: ScrollablePositionedList.builder(
+          shrinkWrap: widget.shrinkWrap,
+          initialScrollIndex:
+              (_controller.lastResult.lastPlace?.index ?? 1) - 1,
+          initialAlignment: convertSmallModelToProgress(
+              _controller.lastResult.lastPlace?.percent ?? 0),
+          itemCount: _paragraphs.length,
+          itemScrollController: _itemScrollController,
+          itemPositionsListener: _itemPositionListener,
+          itemBuilder: (BuildContext context, int index) {
+            return widget.builders.chapterBuilder(
+              context,
+              widget.builders,
+              widget.controller._document!,
+              _chapters,
+              _paragraphs,
+              index,
+              _getChapterIndexBy(positionIndex: index),
+              _getParagraphIndexBy(positionIndex: index),
+              _onLinkPressed,
+            );
+          },
         ),
       ),
     );
@@ -562,29 +560,19 @@ class _EpubViewState extends State<EpubView> {
       ),
     );
   }
-}
 
-class TestScrollbar extends StatelessWidget {
-  const TestScrollbar({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return CupertinoScrollbar(
-      thumbVisibility: true,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              height: 700,
-              color: Colors.blue,
-            ),
-            Container(
-              height: 700,
-              color: Colors.red,
-            ),
-          ],
-        ),
-      ),
+  Future<void>? scrollToLastPlace({
+    required LastPlaceModel lastPlace,
+    Duration duration = const Duration(milliseconds: 250),
+    Curve curve = Curves.linear,
+  }) async {
+    await _itemScrollController?.scrollTo(
+      index: lastPlace.index ?? 0,
+      duration: duration,
+      alignment: 0,
+      curve: curve,
     );
+    final position = _itemPositionListener?.itemPositions.value.first;
+    if (position != null) {}
   }
 }
