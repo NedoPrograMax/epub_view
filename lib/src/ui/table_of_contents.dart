@@ -34,37 +34,43 @@ class EpubViewTableOfContents extends StatelessWidget {
           Widget content;
 
           if (data.isNotEmpty) {
-            content = Column(
-              children: [
-                titleBuilder?.call(controller.getDocument()?.Title ?? "") ??
-                    Text(controller.getDocument()?.Title ?? ""),
-                const SizedBox(height: 6),
-                Expanded(
-                  child: ListView.builder(
-                    padding: padding,
-                    key: Key('$runtimeType.content'),
-                    itemBuilder: (context, index) => Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: () {
-                          if (onScrollStarted != null) {
-                            onScrollStarted!();
-                          }
-                          controller.scrollTo(index: data[index].startIndex);
-                        },
-                        child: Ink(
-                          child: itemBuilder?.call(
-                                  context, index, data[index], data.length) ??
-                              ListTile(
-                                title: Text(data[index].title!.trim()),
-                              ),
+            content = Padding(
+              padding: const EdgeInsets.only(
+                left: 12,
+                top: 24,
+              ),
+              child: Column(
+                children: [
+                  titleBuilder?.call(controller.getDocument()?.Title ?? "") ??
+                      Text(controller.getDocument()?.Title ?? ""),
+                  const SizedBox(height: 6),
+                  Expanded(
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      key: Key('$runtimeType.content'),
+                      itemBuilder: (context, index) => Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () {
+                            if (onScrollStarted != null) {
+                              onScrollStarted!();
+                            }
+                            controller.scrollTo(index: data[index].startIndex);
+                          },
+                          child: Ink(
+                            child: itemBuilder?.call(
+                                    context, index, data[index], data.length) ??
+                                ListTile(
+                                  title: Text(data[index].title!.trim()),
+                                ),
+                          ),
                         ),
                       ),
+                      itemCount: data.length,
                     ),
-                    itemCount: data.length,
                   ),
-                ),
-              ],
+                ],
+              ),
             );
           } else {
             content = KeyedSubtree(
