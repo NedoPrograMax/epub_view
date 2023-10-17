@@ -27,10 +27,14 @@ class _EpubViewBottomBarState extends State<EpubViewBottomBar> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          if (showSlider)
-            ScrollSlider(
+          AnimatedSlide(
+            duration: const Duration(milliseconds: 300),
+            offset: showSlider ? Offset.zero : const Offset(0, 1),
+            child: ScrollSlider(
               controller: widget.controller,
+              backgroundColor: widget.backgroundColor,
             ),
+          ),
           Container(
             height: 56,
             decoration: BoxDecoration(

@@ -17,6 +17,7 @@ class ScrollSlider extends StatefulWidget {
 
 class _ScrollSliderState extends State<ScrollSlider> {
   double percent = 0;
+  DateTime lastScrollToPlace = DateTime.now();
   static const scrollSliderTag = "scrollSliderTag";
 
   @override
@@ -49,7 +50,10 @@ class _ScrollSliderState extends State<ScrollSlider> {
           EasyDebounce.debounce(
             scrollSliderTag,
             const Duration(milliseconds: 100),
-            () => widget.controller.scrollToPercent(percent: percent),
+            () {
+              lastScrollToPlace = DateTime.now();
+              widget.controller.scrollToPercent(percent: percent);
+            },
           );
         },
       ),
@@ -57,9 +61,11 @@ class _ScrollSliderState extends State<ScrollSlider> {
   }
 
   void controllerListener() {
-    setState(() {
-      percent =
-          widget.controller.currentValueListenable.value?.lastProgress ?? 0;
-    });
+    if (DateTime.now().difference(lastScrollToPlace).inSeconds > 5) {
+      setState(() {
+        percent =
+            widget.controller.currentValueListenable.value?.lastProgress ?? 0;
+      });
+    }
   }
 }
