@@ -75,6 +75,8 @@ class _EpubViewState extends State<EpubView> {
   late final Repository repository;
 
   EpubController get _controller => widget.controller;
+  bool didScrollToLastPlace = false;
+  LastPlaceModel? scrollToPlace;
 
   @override
   void initState() {
@@ -566,19 +568,28 @@ class _EpubViewState extends State<EpubView> {
     Duration duration = const Duration(milliseconds: 250),
     Curve curve = Curves.linear,
   }) async {
-    await _itemScrollController?.scrollTo(
+    _itemPositionListener?.itemPositions.removeListener(positionScrollListener);
+    scrollToPlace = lastPlace;
+    _itemScrollController?.scrollTo(
       index: lastPlace.index ?? 0,
       duration: duration,
       alignment: 0,
       curve: curve,
     );
     _itemPositionListener?.itemPositions.addListener(positionScrollListener);
-    final position = _itemPositionListener?.itemPositions.value.first;
-    if (position != null) {}
   }
 
-  void positionScrollListener() {
-    final position = _itemPositionListener?.itemPositions.value;
-    print(1);
+  void positionScrollListener() async {
+    final position = _itemPositionListener?.itemPositions.value.first;
+    if (position?.index == scrollToPlace?.index &&
+        scrollToPlace?.index != null) {
+      await _itemScrollController?.scrollTo(
+        index: scrollToPlace!.index!,
+        duration: const Duration(milliseconds: 30),
+        alignment:
+            -(position?.itemTrailingEdge ?? 0) * (scrollToPlace?.percent ?? 0),
+        curve: Curves.linear,
+      );
+    }
   }
 }
