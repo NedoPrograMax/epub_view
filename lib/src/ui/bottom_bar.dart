@@ -22,7 +22,8 @@ class _EpubViewBottomBarState extends State<EpubViewBottomBar> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 114,
-      child: Stack(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           if (showSlider) ScrollSlider(controller: widget.controller),
           Container(
