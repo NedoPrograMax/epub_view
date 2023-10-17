@@ -476,35 +476,37 @@ class _EpubViewState extends State<EpubView> {
         context: context,
         removeTop: true,
         removeBottom: true,
-        child: CupertinoScrollbar(
-          thickness: 8,
-          radius: const Radius.circular(4),
-          controller: _itemScrollController!.primaryScrollController,
-          thumbVisibility: true,
-          child: ScrollablePositionedList.builder(
-            shrinkWrap: widget.shrinkWrap,
-            initialScrollIndex:
-                (_controller.lastResult.lastPlace?.index ?? 1) - 1,
-            initialAlignment: convertSmallModelToProgress(
-                _controller.lastResult.lastPlace?.percent ?? 0),
-            itemCount: _paragraphs.length,
-            itemScrollController: _itemScrollController,
-            itemPositionsListener: _itemPositionListener,
-            itemBuilder: (BuildContext context, int index) {
-              return widget.builders.chapterBuilder(
-                context,
-                widget.builders,
-                widget.controller._document!,
-                _chapters,
-                _paragraphs,
-                index,
-                _getChapterIndexBy(positionIndex: index),
-                _getParagraphIndexBy(positionIndex: index),
-                _onLinkPressed,
-              );
-            },
-          ),
-        ),
+        child: true
+            ? const TestScrollbar()
+            : CupertinoScrollbar(
+                thickness: 8,
+                radius: const Radius.circular(4),
+                controller: _itemScrollController!.primaryScrollController,
+                thumbVisibility: true,
+                child: ScrollablePositionedList.builder(
+                  shrinkWrap: widget.shrinkWrap,
+                  initialScrollIndex:
+                      (_controller.lastResult.lastPlace?.index ?? 1) - 1,
+                  initialAlignment: convertSmallModelToProgress(
+                      _controller.lastResult.lastPlace?.percent ?? 0),
+                  itemCount: _paragraphs.length,
+                  itemScrollController: _itemScrollController,
+                  itemPositionsListener: _itemPositionListener,
+                  itemBuilder: (BuildContext context, int index) {
+                    return widget.builders.chapterBuilder(
+                      context,
+                      widget.builders,
+                      widget.controller._document!,
+                      _chapters,
+                      _paragraphs,
+                      index,
+                      _getChapterIndexBy(positionIndex: index),
+                      _getParagraphIndexBy(positionIndex: index),
+                      _onLinkPressed,
+                    );
+                  },
+                ),
+              ),
       ),
     );
   }
@@ -559,6 +561,31 @@ class _EpubViewState extends State<EpubView> {
         _controller.loadingState.value,
         _buildLoaded,
         _loadingError,
+      ),
+    );
+  }
+}
+
+class TestScrollbar extends StatelessWidget {
+  const TestScrollbar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoScrollbar(
+      thumbVisibility: true,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              height: 700,
+              color: Colors.blue,
+            ),
+            Container(
+              height: 700,
+              color: Colors.red,
+            ),
+          ],
+        ),
       ),
     );
   }
