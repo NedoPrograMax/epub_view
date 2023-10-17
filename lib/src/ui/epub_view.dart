@@ -12,6 +12,7 @@ import 'package:epub_view/src/data/models/reader_result.dart';
 import 'package:epub_view/src/data/repository.dart';
 import 'package:epub_view/src/helpers/extensions.dart';
 import 'package:epub_view/src/helpers/utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -475,12 +476,11 @@ class _EpubViewState extends State<EpubView> {
         context: context,
         removeTop: true,
         removeBottom: true,
-        child: Scrollbar(
+        child: CupertinoScrollbar(
           thickness: 8,
           radius: const Radius.circular(4),
-          interactive: true,
-          // controller: _itemScrollController!.primaryScrollController,
-          // thumbVisibility: true,
+          controller: _itemScrollController!.primaryScrollController,
+          thumbVisibility: true,
           child: ScrollablePositionedList.builder(
             shrinkWrap: widget.shrinkWrap,
             initialScrollIndex:
