@@ -468,38 +468,41 @@ class _EpubViewState extends State<EpubView> {
   }
 
   Widget _buildLoaded(BuildContext context) {
-    return MediaQuery.removePadding(
-      context: context,
-      removeTop: true,
-      removeBottom: true,
-      child: Scrollbar(
-        thickness: 8,
-        radius: const Radius.circular(4),
-        interactive: true,
-        controller: _itemScrollController!.primaryScrollController,
-        thumbVisibility: true,
-        child: ScrollablePositionedList.builder(
-          shrinkWrap: widget.shrinkWrap,
-          initialScrollIndex:
-              (_controller.lastResult.lastPlace?.index ?? 1) - 1,
-          initialAlignment: convertSmallModelToProgress(
-              _controller.lastResult.lastPlace?.percent ?? 0),
-          itemCount: _paragraphs.length,
-          itemScrollController: _itemScrollController,
-          itemPositionsListener: _itemPositionListener,
-          itemBuilder: (BuildContext context, int index) {
-            return widget.builders.chapterBuilder(
-              context,
-              widget.builders,
-              widget.controller._document!,
-              _chapters,
-              _paragraphs,
-              index,
-              _getChapterIndexBy(positionIndex: index),
-              _getParagraphIndexBy(positionIndex: index),
-              _onLinkPressed,
-            );
-          },
+    return Padding(
+      padding: const EdgeInsets.only(right: 40),
+      child: MediaQuery.removePadding(
+        context: context,
+        removeTop: true,
+        removeBottom: true,
+        child: Scrollbar(
+          thickness: 8,
+          radius: const Radius.circular(4),
+          interactive: true,
+          controller: _itemScrollController!.primaryScrollController,
+          thumbVisibility: true,
+          child: ScrollablePositionedList.builder(
+            shrinkWrap: widget.shrinkWrap,
+            initialScrollIndex:
+                (_controller.lastResult.lastPlace?.index ?? 1) - 1,
+            initialAlignment: convertSmallModelToProgress(
+                _controller.lastResult.lastPlace?.percent ?? 0),
+            itemCount: _paragraphs.length,
+            itemScrollController: _itemScrollController,
+            itemPositionsListener: _itemPositionListener,
+            itemBuilder: (BuildContext context, int index) {
+              return widget.builders.chapterBuilder(
+                context,
+                widget.builders,
+                widget.controller._document!,
+                _chapters,
+                _paragraphs,
+                index,
+                _getChapterIndexBy(positionIndex: index),
+                _getParagraphIndexBy(positionIndex: index),
+                _onLinkPressed,
+              );
+            },
+          ),
         ),
       ),
     );
