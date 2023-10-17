@@ -28,7 +28,7 @@ class _EpubViewBottomBarState extends State<EpubViewBottomBar> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           AnimatedSlide(
-            duration: const Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 200),
             offset: showSlider ? Offset.zero : const Offset(0, 1),
             child: ScrollSlider(
               controller: widget.controller,

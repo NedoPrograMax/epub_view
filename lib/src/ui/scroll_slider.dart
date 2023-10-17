@@ -38,7 +38,13 @@ class _ScrollSliderState extends State<ScrollSlider> {
   Widget build(BuildContext context) {
     return Container(
       height: 58,
-      color: widget.backgroundColor,
+      decoration: BoxDecoration(
+        color: widget.backgroundColor,
+        border: const Border(
+          top:
+              BorderSide(color: Color.fromARGB(255, 170, 170, 181), width: 0.5),
+        ),
+      ),
       child: Slider(
         value: percent,
         activeColor: const Color.fromRGBO(89, 53, 233, 1),
@@ -61,7 +67,7 @@ class _ScrollSliderState extends State<ScrollSlider> {
   }
 
   void controllerListener() {
-    if (DateTime.now().difference(lastScrollToPlace).inSeconds > 5) {
+    if (DateTime.now().difference(lastScrollToPlace).inSeconds >= 2) {
       setState(() {
         percent =
             widget.controller.currentValueListenable.value?.lastProgress ?? 0;
