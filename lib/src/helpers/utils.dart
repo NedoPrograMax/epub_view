@@ -4,7 +4,7 @@ import 'package:epub_view/src/data/models/paragraph.dart';
 import 'package:html/dom.dart';
 
 Duration countReadDurationOfParagraph(Paragraph paragraph) {
-  final symbolsInParagraph = paragraph.wordsCount;
+  final symbolsInParagraph = paragraph.symbolsCount;
   const symbolsPerSecond = 25;
   final normalReadSeconds = symbolsInParagraph / symbolsPerSecond;
   const coef = 0.1;
@@ -13,8 +13,8 @@ Duration countReadDurationOfParagraph(Paragraph paragraph) {
   return Duration(milliseconds: coedReadMilliseconds.round());
 }
 
-int countWordsInElement(Element element) {
-  return getWordCountsInNodeList(element.nodes);
+int countSymbolsInElement(Element element) {
+  return getSymbolsCountsInNodeList(element.nodes);
 }
 
 double countUserProgress(
@@ -27,14 +27,14 @@ double countUserProgress(
   double readSymbols = 0;
   for (int i = 0; i < paragraphs.length; i++) {
     final paragraph = paragraphs[i];
-    allSymbols += paragraph.wordsCount;
+    allSymbols += paragraph.symbolsCount;
     if (paragraph.chapterIndex < chapterNumber) {
-      readSymbols += paragraph.wordsCount;
+      readSymbols += paragraph.symbolsCount;
     } else if (paragraph.chapterIndex == chapterNumber) {
       if (i < paragraphNumber) {
-        readSymbols += paragraph.wordsCount;
+        readSymbols += paragraph.symbolsCount;
       } else if (i == paragraphNumber) {
-        readSymbols += paragraph.wordsCount * lastPercent;
+        readSymbols += paragraph.symbolsCount * lastPercent;
       }
     }
   }
@@ -47,29 +47,29 @@ double countRealProgress(List<Paragraph> paragraphs) {
   double readSymbols = 0;
   for (int i = 0; i < paragraphs.length; i++) {
     final paragraph = paragraphs[i];
-    allSymbols += paragraph.wordsCount;
+    allSymbols += paragraph.symbolsCount;
 
-    readSymbols += paragraph.wordsCount * paragraph.percent;
+    readSymbols += paragraph.symbolsCount * paragraph.percent;
   }
 
   final readPercent = readSymbols / allSymbols;
   return max(readPercent, 0.001);
 }
 
-int getWordCountsInNode(Node node) {
-  var wordCount = node.text?.trim().split(' ').length ?? 0;
+int getSymbolsCountsInNode(Node node) {
+  var symbolsCount = node.text?.trim().replaceAll(' ', "").length ?? 0;
   if (node.nodes.isNotEmpty) {
-    wordCount += getWordCountsInNodeList(node.nodes);
+    symbolsCount += getSymbolsCountsInNodeList(node.nodes);
   }
-  return wordCount;
+  return symbolsCount;
 }
 
-int getWordCountsInNodeList(NodeList nodeList) {
-  var wordCount = 0;
+int getSymbolsCountsInNodeList(NodeList nodeList) {
+  var symbolsCount = 0;
   for (var i = 0; i < nodeList.length; i++) {
-    wordCount += getWordCountsInNode(nodeList[i]);
+    symbolsCount += getSymbolsCountsInNode(nodeList[i]);
   }
-  return wordCount;
+  return symbolsCount;
 }
 
 const smallConversionNumber = 10000.0;

@@ -116,10 +116,10 @@ class EpubParser {
       element: element,
       chapterIndex: chapterIndex,
       percent: 0,
-      wordsCount: countWordsInElement(element),
+      symbolsCount: countSymbolsInElement(element),
       wordsBefore: wordsBefore,
     );
-    wordsBefore += paragraph.wordsCount;
+    wordsBefore += paragraph.symbolsCount;
     return paragraph;
   }
 }

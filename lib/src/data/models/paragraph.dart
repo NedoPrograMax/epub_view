@@ -6,13 +6,13 @@ class Paragraph {
     required this.element,
     required this.chapterIndex,
     required this.percent,
-    this.wordsCount = 0,
+    this.symbolsCount = 0,
     required this.wordsBefore,
   });
 
   final dom.Element element;
   final int chapterIndex;
-  final int wordsCount;
+  final int symbolsCount;
   final int wordsBefore;
   double percent = 0;
 
@@ -26,21 +26,22 @@ extension ParagraphsExtension on List<Paragraph> {
   LastPlaceModel binarySearchForPlaceByPercent(double percent) {
     var min = 0;
     var max = length;
-    final wordsByPercent = (last.wordsBefore + last.wordsCount) * percent;
+    final wordsByPercent = (last.wordsBefore + last.symbolsCount) * percent;
 
     while (min < max) {
       var mid = min + ((max - min) >> 1);
       var element = this[mid];
 
       if (element.wordsBefore < wordsByPercent &&
-          element.wordsBefore + element.wordsCount >= wordsByPercent) {
+          element.wordsBefore + element.symbolsCount >= wordsByPercent) {
         return LastPlaceModel(
-          percent: (element.wordsBefore + element.wordsCount - wordsByPercent) /
-              element.wordsCount,
+          percent:
+              (element.wordsBefore + element.symbolsCount - wordsByPercent) /
+                  element.symbolsCount,
           index: mid,
         );
       } else if (element.wordsBefore < wordsByPercent &&
-          element.wordsBefore + element.wordsCount < wordsByPercent) {
+          element.wordsBefore + element.symbolsCount < wordsByPercent) {
         min = mid + 1;
       } else {
         max = mid;

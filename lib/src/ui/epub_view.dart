@@ -69,10 +69,11 @@ class _EpubViewState extends State<EpubView> {
   EpubCfiReader? _epubCfiReader;
   EpubChapterViewValue? _currentValue;
   final _chapterIndexes = <int>[];
-  DateTime paragraphStart = DateTime.now();
-  DateTime lastChange = DateTime.now();
+  DateTime paragraphStartTime = DateTime.now();
+  DateTime lastChangeTime = DateTime.now();
   Duration paragraphDuration = Duration.zero;
   late final Repository repository;
+  double paragraphStartPercent = 0;
 
   EpubController get _controller => widget.controller;
   bool didScrollToLastPlace = false;
@@ -182,7 +183,8 @@ class _EpubViewState extends State<EpubView> {
 
     if (!isTheSameParagraph) {
       paragraphDuration = countReadDurationOfParagraph(paragraph);
-      paragraphStart = lastChange;
+      paragraphStartTime = lastChangeTime;
+      paragraphStartPercent = paragraph.percent;
     }
     _currentValue = EpubChapterViewValue(
       chapter: chapterIndex >= 0 ? _chapters[chapterIndex] : null,
@@ -193,23 +195,22 @@ class _EpubViewState extends State<EpubView> {
 
     final now = DateTime.now();
     final timePercent = min(
-        1.0,
-        now.difference(paragraphStart).inMilliseconds /
-            paragraphDuration.inMilliseconds);
-    final realTimePercent = isTheSameParagraph
-        ? timePercent
-        : min(1.0, paragraph.percent + timePercent);
+      1.0,
+      now.difference(paragraphStartTime).inMilliseconds /
+              paragraphDuration.inMilliseconds +
+          paragraphStartPercent,
+    );
 
-    final currentPercent = (_currentValue?.progress ?? 0.0) / 100.0;
-    final currentPercentWithTime = min(realTimePercent, currentPercent);
+    final viewPercent = (_currentValue?.progress ?? 0.0) / 100.0;
+    final currentPercentWithTime = min(timePercent, viewPercent);
     paragraph.percent = max(paragraph.percent, currentPercentWithTime);
 
-    lastChange = DateTime.now();
+    lastChangeTime = DateTime.now();
     final countedProgress = countUserProgress(
       _paragraphs,
       chapterNumber: chapterIndex,
       paragraphNumber: paragraphAbsIndex,
-      lastPercent: currentPercent,
+      lastPercent: viewPercent,
     );
     /* final userProgress = max(
       countedProgress,
@@ -220,10 +221,6 @@ class _EpubViewState extends State<EpubView> {
         _currentValue?.copyWith(lastProgress: countedProgress);
     widget.onChapterChanged?.call(_currentValue);
 
-    final firstItem = _itemPositionListener?.itemPositions.value.first;
-    final aligment = currentPercent *
-        ((firstItem?.itemLeadingEdge ?? 0).abs() +
-            (firstItem?.itemTrailingEdge ?? 0).abs());
     // +10k is needed so the percent is > 0. then it -
     final countedLastPlace = LastPlaceModel(
       percent: convertProgressToSmallModel(position.itemLeadingEdge),
