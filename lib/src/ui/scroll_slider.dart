@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 
 class ScrollSlider extends StatefulWidget {
   final EpubController controller;
+  final Color? backgroundColor;
   const ScrollSlider({
     super.key,
+    this.backgroundColor,
     required this.controller,
   });
 
@@ -20,19 +22,22 @@ class _ScrollSliderState extends State<ScrollSlider> {
   @override
   void initState() {
     percent = widget.controller.currentValue?.lastProgress ?? 0;
+    widget.controller.currentValueListenable.addListener(controllerListener);
     super.initState();
   }
 
   @override
   void dispose() {
     EasyDebounce.cancel(scrollSliderTag);
+    widget.controller.currentValueListenable.removeListener(controllerListener);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       height: 58,
+      color: widget.backgroundColor,
       child: Slider(
         value: percent,
         activeColor: const Color.fromRGBO(89, 53, 233, 1),
@@ -49,5 +54,12 @@ class _ScrollSliderState extends State<ScrollSlider> {
         },
       ),
     );
+  }
+
+  void controllerListener() {
+    setState(() {
+      percent =
+          widget.controller.currentValueListenable.value?.lastProgress ?? 0;
+    });
   }
 }

@@ -22,17 +22,20 @@ class _EpubViewBottomBarState extends State<EpubViewBottomBar> {
   bool showSlider = false;
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 114,
-      color: widget.backgroundColor,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          if (showSlider) ScrollSlider(controller: widget.controller),
+          if (showSlider)
+            ScrollSlider(
+              controller: widget.controller,
+            ),
           Container(
             height: 56,
-            decoration: const BoxDecoration(
-              border: Border(
+            decoration: BoxDecoration(
+              color: widget.backgroundColor,
+              border: const Border(
                 top: BorderSide(
                     color: Color.fromARGB(255, 170, 170, 181), width: 0.5),
               ),
@@ -53,7 +56,7 @@ class _EpubViewBottomBarState extends State<EpubViewBottomBar> {
                     ? widget.builder!(value)
                     : Center(
                         child: Text(
-                          value?.progress.toString() ?? "",
+                          value?.lastProgress.toString() ?? "",
                         ),
                       ),
               ),
