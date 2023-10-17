@@ -24,6 +24,7 @@ dependencies:
   collection: ^1.17.1
   universal_file: ^1.0.0
   rxdart: ^0.27.7
+  easy_debounce: ^2.0.3
   epubx:
    git:
       url: https://github.com/NedoPrograMax/epubx.dart
