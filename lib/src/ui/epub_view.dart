@@ -128,6 +128,12 @@ class _EpubViewState extends State<EpubView> {
       paragraphs: _paragraphs,
     );
     _itemPositionListener!.itemPositions.addListener(_changeListener);
+    _itemScrollController!.primaryScrollController!.addListener(() {
+      print(1);
+    });
+    _itemScrollController!.secondaryScrollController!.addListener(() {
+      print(1);
+    });
     _controller.isBookLoaded.value = true;
 
     return true;
