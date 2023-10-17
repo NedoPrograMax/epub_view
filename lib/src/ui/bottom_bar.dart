@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 class EpubViewBottomBar extends StatefulWidget {
   final EpubController controller;
   final Widget Function(EpubChapterViewValue? data)? builder;
+  final Color? backgroundColor;
   const EpubViewBottomBar({
     super.key,
     required this.controller,
     this.builder,
+    this.backgroundColor,
   });
 
   @override
@@ -20,8 +22,9 @@ class _EpubViewBottomBarState extends State<EpubViewBottomBar> {
   bool showSlider = false;
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       height: 114,
+      color: widget.backgroundColor,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
