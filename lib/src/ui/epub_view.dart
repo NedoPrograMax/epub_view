@@ -478,8 +478,8 @@ class _EpubViewState extends State<EpubView> {
           thickness: 8,
           radius: const Radius.circular(4),
           interactive: true,
-          controller: _itemScrollController!.primaryScrollController,
-          thumbVisibility: true,
+          // controller: _itemScrollController!.primaryScrollController,
+          // thumbVisibility: true,
           child: ScrollablePositionedList.builder(
             shrinkWrap: widget.shrinkWrap,
             initialScrollIndex:
