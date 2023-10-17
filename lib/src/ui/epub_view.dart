@@ -572,7 +572,13 @@ class _EpubViewState extends State<EpubView> {
       alignment: 0,
       curve: curve,
     );
+    _itemPositionListener?.itemPositions.addListener(positionScrollListener);
     final position = _itemPositionListener?.itemPositions.value.first;
     if (position != null) {}
+  }
+
+  void positionScrollListener() {
+    final position = _itemPositionListener?.itemPositions.value;
+    print(1);
   }
 }
