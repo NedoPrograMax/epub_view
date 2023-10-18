@@ -58,7 +58,7 @@ class _ScrollSliderState extends State<ScrollSlider> {
             const Duration(milliseconds: 100),
             () {
               lastScrollToPlace = DateTime.now();
-              widget.controller.scrollToPercent(percent: percent);
+              widget.controller.jumpToPercent(percent: percent);
             },
           );
         },

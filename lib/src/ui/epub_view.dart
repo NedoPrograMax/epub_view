@@ -557,7 +557,7 @@ class _EpubViewState extends State<EpubView> {
     );
   }
 
-  Future<void>? scrollToLastPlace({
+  Future<void>? jumpToLastPlace({
     required LastPlaceModel lastPlace,
     Duration duration = const Duration(milliseconds: 250),
     Curve curve = Curves.linear,
@@ -565,11 +565,9 @@ class _EpubViewState extends State<EpubView> {
     _itemPositionListener?.itemPositions.removeListener(positionScrollListener);
     scrollToPlace = lastPlace;
     didScrollToLastPlace = false;
-    _itemScrollController?.scrollTo(
+    _itemScrollController?.jumpTo(
       index: lastPlace.index ?? 0,
-      duration: duration,
       alignment: 0,
-      curve: curve,
     );
     _itemPositionListener?.itemPositions.addListener(positionScrollListener);
   }
@@ -580,12 +578,10 @@ class _EpubViewState extends State<EpubView> {
       if (position?.index == scrollToPlace?.index &&
           scrollToPlace?.index != null) {
         didScrollToLastPlace = true;
-        _itemScrollController?.scrollTo(
+        _itemScrollController?.jumpTo(
           index: scrollToPlace!.index!,
-          duration: const Duration(milliseconds: 30),
           alignment: -(position?.itemTrailingEdge ?? 0) *
               (scrollToPlace?.percent ?? 0),
-          curve: Curves.linear,
         );
       }
     }
