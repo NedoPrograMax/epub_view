@@ -1,11 +1,10 @@
 import 'package:epub_view/epub_view.dart';
-import 'package:epub_view/src/data/models/chapter_view_value.dart';
 import 'package:epub_view/src/ui/scroll_slider.dart';
 import 'package:flutter/material.dart';
 
 class EpubViewBottomBar extends StatefulWidget {
   final EpubController controller;
-  final Widget Function(EpubChapterViewValue? data)? builder;
+  final Widget Function(double percent)? builder;
   final Color? backgroundColor;
   const EpubViewBottomBar({
     super.key,
@@ -20,6 +19,14 @@ class EpubViewBottomBar extends StatefulWidget {
 
 class _EpubViewBottomBarState extends State<EpubViewBottomBar> {
   bool showSlider = false;
+  late final ValueNotifier<double> currentPercent;
+
+  @override
+  void initState() {
+    currentPercent.value = widget.controller.currentValue?.lastProgress ?? 0;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -33,6 +40,7 @@ class _EpubViewBottomBarState extends State<EpubViewBottomBar> {
             child: ScrollSlider(
               controller: widget.controller,
               backgroundColor: widget.backgroundColor,
+              currentPercent: currentPercent,
             ),
           ),
           Container(
@@ -54,13 +62,13 @@ class _EpubViewBottomBarState extends State<EpubViewBottomBar> {
                   showSlider = !showSlider;
                 });
               },
-              child: ValueListenableBuilder<EpubChapterViewValue?>(
-                valueListenable: widget.controller.currentValueListenable,
+              child: ValueListenableBuilder<double>(
+                valueListenable: currentPercent,
                 builder: (context, value, child) => widget.builder != null
                     ? widget.builder!(value)
                     : Center(
                         child: Text(
-                          value?.lastProgress.toString() ?? "",
+                          value.toString(),
                         ),
                       ),
               ),

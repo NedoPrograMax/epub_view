@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 class ScrollSlider extends StatefulWidget {
   final EpubController controller;
   final Color? backgroundColor;
+  final ValueNotifier<double> currentPercent;
   const ScrollSlider({
     super.key,
     this.backgroundColor,
+    required this.currentPercent,
     required this.controller,
   });
 
@@ -16,13 +18,13 @@ class ScrollSlider extends StatefulWidget {
 }
 
 class _ScrollSliderState extends State<ScrollSlider> {
-  double percent = 0;
   DateTime lastScrollToPlace = DateTime.now();
   static const scrollSliderTag = "scrollSliderTag";
 
   @override
   void initState() {
-    percent = widget.controller.currentValue?.lastProgress ?? 0;
+    widget.currentPercent.value =
+        widget.controller.currentValue?.lastProgress ?? 0;
     widget.controller.currentValueListenable.addListener(controllerListener);
     super.initState();
   }
@@ -45,33 +47,33 @@ class _ScrollSliderState extends State<ScrollSlider> {
               BorderSide(color: Color.fromARGB(255, 170, 170, 181), width: 0.5),
         ),
       ),
-      child: Slider(
-        value: percent,
-        activeColor: const Color.fromRGBO(89, 53, 233, 1),
-        inactiveColor: const Color.fromRGBO(215, 208, 245, 1),
-        onChanged: (value) {
-          setState(() {
-            percent = value;
-          });
-          EasyDebounce.debounce(
-            scrollSliderTag,
-            const Duration(milliseconds: 100),
-            () {
-              lastScrollToPlace = DateTime.now();
-              widget.controller.jumpToPercent(percent: percent);
-            },
-          );
-        },
+      child: ValueListenableBuilder<double>(
+        valueListenable: widget.currentPercent,
+        builder: (context, percent, child) => Slider(
+          value: percent,
+          activeColor: const Color.fromRGBO(89, 53, 233, 1),
+          inactiveColor: const Color.fromRGBO(215, 208, 245, 1),
+          onChanged: (value) {
+            widget.currentPercent.value = value;
+
+            EasyDebounce.debounce(
+              scrollSliderTag,
+              const Duration(milliseconds: 100),
+              () {
+                lastScrollToPlace = DateTime.now();
+                widget.controller.jumpToPercent(percent: percent);
+              },
+            );
+          },
+        ),
       ),
     );
   }
 
   void controllerListener() {
     if (DateTime.now().difference(lastScrollToPlace).inSeconds >= 2) {
-      setState(() {
-        percent =
-            widget.controller.currentValueListenable.value?.lastProgress ?? 0;
-      });
+      widget.currentPercent.value =
+          widget.controller.currentValueListenable.value?.lastProgress ?? 0;
     }
   }
 }
