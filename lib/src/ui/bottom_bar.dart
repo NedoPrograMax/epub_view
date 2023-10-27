@@ -43,13 +43,13 @@ class _EpubViewBottomBarState extends State<EpubViewBottomBar> {
     final direction =
         scrollListenable.value?.scrollPosition?.userScrollDirection;
     if (direction == ScrollDirection.reverse) {
-      if (!showSlider) {
+      if (showSlider) {
         setState(() {
           showSlider = false;
         });
       }
     } else if (direction == ScrollDirection.forward) {
-      if (showSlider) {
+      if (!showSlider) {
         setState(() {
           showSlider = true;
         });
