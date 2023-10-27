@@ -112,8 +112,7 @@ class _EpubViewState extends State<EpubView> {
     _itemPositionListener!.itemPositions.removeListener(_changeListener);
     _controller._detach();
     repository.closeStream();
-    _itemScrollController?.primaryScrollController
-        ?.removeListener(_scrollListener);
+
     super.dispose();
   }
 
@@ -135,17 +134,10 @@ class _EpubViewState extends State<EpubView> {
       paragraphs: _paragraphs,
     );
     _itemPositionListener!.itemPositions.addListener(_changeListener);
-    _itemScrollController?.primaryScrollController
-        ?.addListener(_scrollListener);
 
     _controller.isBookLoaded.value = true;
 
     return true;
-  }
-
-  void _scrollListener() {
-    _controller.scrollPositionListenable.value =
-        _itemScrollController?.primaryScrollController?.position;
   }
 
   void _syncParagraphs() {
@@ -157,6 +149,8 @@ class _EpubViewState extends State<EpubView> {
   }
 
   void _changeListener() {
+    _controller.scrollPositionListenable.value =
+        _itemScrollController?.primaryScrollController?.position;
     final result = countResult();
     if (result != null) {
       repository.addData(result);
