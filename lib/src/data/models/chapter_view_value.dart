@@ -1,4 +1,5 @@
 import 'package:epub_view/src/data/epub_parser.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 export 'package:epubx/epubx.dart' hide Image;
@@ -9,6 +10,7 @@ class EpubChapterViewValue {
     required this.chapterNumber,
     required this.paragraphNumber,
     required this.position,
+    this.scrollPosition,
     this.lastProgress,
   });
 
@@ -17,14 +19,18 @@ class EpubChapterViewValue {
   final int paragraphNumber;
   final ItemPosition position;
   final double? lastProgress;
-  EpubChapterViewValue copyWith({required double lastProgress}) =>
+  final ScrollPosition? scrollPosition;
+  EpubChapterViewValue copyWith({
+    double? lastProgress,
+    ScrollPosition? scrollPosition,
+  }) =>
       EpubChapterViewValue(
-        chapter: chapter,
-        chapterNumber: chapterNumber,
-        paragraphNumber: paragraphNumber,
-        position: position,
-        lastProgress: lastProgress,
-      );
+          chapter: chapter,
+          chapterNumber: chapterNumber,
+          paragraphNumber: paragraphNumber,
+          position: position,
+          lastProgress: lastProgress ?? this.lastProgress,
+          scrollPosition: scrollPosition ?? this.scrollPosition);
 
   /// Chapter view in percents
   double get progress {

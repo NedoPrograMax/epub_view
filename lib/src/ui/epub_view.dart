@@ -149,8 +149,6 @@ class _EpubViewState extends State<EpubView> {
   }
 
   void _changeListener() {
-    _controller.scrollPositionListenable.value =
-        _itemScrollController?.primaryScrollController?.position;
     final result = countResult();
     if (result != null) {
       repository.addData(result);
@@ -220,8 +218,10 @@ class _EpubViewState extends State<EpubView> {
       repository.lastReadResult.lastProgress,
     ); */
 
-    _controller.currentValueListenable.value =
-        _currentValue?.copyWith(lastProgress: countedProgress);
+    _controller.currentValueListenable.value = _currentValue?.copyWith(
+        lastProgress: countedProgress,
+        scrollPosition:
+            _itemScrollController?.primaryScrollController?.position);
     widget.onChapterChanged?.call(_currentValue);
 
     // +10k is needed so the percent is > 0. then it -

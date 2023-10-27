@@ -5,6 +5,7 @@ class EpubController {
     required this.document,
     required this.lastResult,
     required this.onSave,
+
     this.epubCfi,
   });
 
@@ -30,7 +31,7 @@ class EpubController {
 
   final tableOfContentsListenable = ValueNotifier<List<EpubViewChapter>>([]);
 
-  final scrollPositionListenable = ValueNotifier<ScrollPosition?>(null);
+
 
   void jumpTo({required int index, double alignment = 0}) =>
       _epubViewState?._itemScrollController?.jumpTo(
@@ -129,7 +130,6 @@ class EpubController {
     isBookLoaded.dispose();
     currentValueListenable.dispose();
     tableOfContentsListenable.dispose();
-    scrollPositionListenable.dispose();
   }
 
   Future<void> _loadDocument(Future<EpubBook> document) async {
