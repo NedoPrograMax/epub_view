@@ -14,7 +14,7 @@ class EpubController {
 
   final String? epubCfi;
 
-  EpubViewState? _epubViewState;
+  _EpubViewState? _epubViewState;
   List<EpubViewChapter>? _cacheTableOfContents;
   EpubBook? _document;
 
@@ -30,13 +30,13 @@ class EpubController {
 
   final tableOfContentsListenable = ValueNotifier<List<EpubViewChapter>>([]);
 
+  final scrollPositionListenable = ValueNotifier<ScrollPosition?>(null);
+
   void jumpTo({required int index, double alignment = 0}) =>
-      _epubViewState?.itemScrollController?.jumpTo(
+      _epubViewState?._itemScrollController?.jumpTo(
         index: index,
         alignment: alignment,
       );
-
-  EpubViewState? get epubViewState => _epubViewState;
 
   Future<void>? scrollTo({
     required int index,
@@ -44,7 +44,7 @@ class EpubController {
     double alignment = 0,
     Curve curve = Curves.linear,
   }) =>
-      _epubViewState?.itemScrollController?.scrollTo(
+      _epubViewState?._itemScrollController?.scrollTo(
         index: index,
         duration: duration,
         alignment: alignment,
@@ -129,6 +129,7 @@ class EpubController {
     isBookLoaded.dispose();
     currentValueListenable.dispose();
     tableOfContentsListenable.dispose();
+    scrollPositionListenable.dispose();
   }
 
   Future<void> _loadDocument(Future<EpubBook> document) async {
@@ -154,7 +155,7 @@ class EpubController {
     return startIndex;
   }
 
-  void _attach(EpubViewState epubReaderViewState) {
+  void _attach(_EpubViewState epubReaderViewState) {
     _epubViewState = epubReaderViewState;
 
     _loadDocument(document);

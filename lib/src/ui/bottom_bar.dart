@@ -21,39 +21,36 @@ class EpubViewBottomBar extends StatefulWidget {
 class _EpubViewBottomBarState extends State<EpubViewBottomBar> {
   bool showSlider = false;
   late final ValueNotifier<double> currentPercent;
-  late final ScrollController? scrollController;
+  late final ValueNotifier<ScrollPosition?> scrollListenable;
 
   @override
   void initState() {
     currentPercent =
         ValueNotifier(widget.controller.currentValue?.lastProgress ?? 0);
-    scrollController = widget
-        .controller.epubViewState?.itemScrollController?.primaryScrollController
-      ?..addListener(scrollListener);
+    scrollListenable = widget.controller.scrollPositionListenable
+      ..addListener(scrollListener);
     super.initState();
   }
 
   @override
   void dispose() {
-    scrollController?.removeListener(scrollListener);
+    scrollListenable.removeListener(scrollListener);
     super.dispose();
   }
 
   void scrollListener() {
-    if (scrollController != null) {
-      if (scrollController!.position.userScrollDirection ==
-          ScrollDirection.reverse) {
-        if (!showSlider) {
-          setState(() {
-            showSlider = true;
-          });
-        }
-      } else {
-        if (showSlider) {
-          setState(() {
-            showSlider = false;
-          });
-        }
+    if (scrollListenable.value?.userScrollDirection ==
+        ScrollDirection.reverse) {
+      if (!showSlider) {
+        setState(() {
+          showSlider = true;
+        });
+      }
+    } else {
+      if (showSlider) {
+        setState(() {
+          showSlider = false;
+        });
       }
     }
   }
