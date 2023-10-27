@@ -43,9 +43,17 @@ class _EpubViewBottomBarState extends State<EpubViewBottomBar> {
     if (scrollController != null) {
       if (scrollController!.position.userScrollDirection ==
           ScrollDirection.reverse) {
-        showSlider = true;
+        if (!showSlider) {
+          setState(() {
+            showSlider = true;
+          });
+        }
       } else {
-        showSlider = false;
+        if (showSlider) {
+          setState(() {
+            showSlider = false;
+          });
+        }
       }
     }
   }
