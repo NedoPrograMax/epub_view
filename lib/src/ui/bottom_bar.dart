@@ -1,6 +1,7 @@
 import 'package:epub_view/epub_view.dart';
 import 'package:epub_view/src/ui/scroll_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 class EpubViewBottomBar extends StatefulWidget {
   final EpubController controller;
@@ -20,11 +21,33 @@ class EpubViewBottomBar extends StatefulWidget {
 class _EpubViewBottomBarState extends State<EpubViewBottomBar> {
   bool showSlider = false;
   late final ValueNotifier<double> currentPercent;
+  late final ScrollController? scrollController;
 
   @override
   void initState() {
-    currentPercent.value = widget.controller.currentValue?.lastProgress ?? 0;
+    currentPercent =
+        ValueNotifier(widget.controller.currentValue?.lastProgress ?? 0);
+    scrollController = widget
+        .controller.epubViewState?.itemScrollController?.primaryScrollController
+      ?..addListener(scrollListener);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    scrollController?.removeListener(scrollListener);
+    super.dispose();
+  }
+
+  void scrollListener() {
+    if (scrollController != null) {
+      if (scrollController!.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        showSlider = true;
+      } else {
+        showSlider = false;
+      }
+    }
   }
 
   @override

@@ -57,12 +57,12 @@ class EpubView extends StatefulWidget {
   final EpubViewBuilders builders;
 
   @override
-  State<EpubView> createState() => _EpubViewState();
+  State<EpubView> createState() => EpubViewState();
 }
 
-class _EpubViewState extends State<EpubView> {
+class EpubViewState extends State<EpubView> {
   Exception? _loadingError;
-  ItemScrollController? _itemScrollController;
+  ItemScrollController? itemScrollController;
   ItemPositionsListener? _itemPositionListener;
   List<EpubChapter> _chapters = [];
   List<Paragraph> _paragraphs = [];
@@ -82,7 +82,7 @@ class _EpubViewState extends State<EpubView> {
   @override
   void initState() {
     super.initState();
-    _itemScrollController = ItemScrollController();
+    itemScrollController = ItemScrollController();
     _itemPositionListener = ItemPositionsListener.create();
     _controller._attach(this);
     _controller.loadingState.addListener(() {
@@ -255,7 +255,7 @@ class _EpubViewState extends State<EpubView> {
       return;
     }
 
-    _itemScrollController?.scrollTo(
+    itemScrollController?.scrollTo(
       index: index,
       duration: duration,
       alignment: alignment,
@@ -480,7 +480,7 @@ class _EpubViewState extends State<EpubView> {
         initialAlignment: convertSmallModelToProgress(
             _controller.lastResult.lastPlace?.percent ?? 0),
         itemCount: _paragraphs.length,
-        itemScrollController: _itemScrollController,
+        itemScrollController: itemScrollController,
         itemPositionsListener: _itemPositionListener,
         itemBuilder: (BuildContext context, int index) {
           return widget.builders.chapterBuilder(
@@ -565,7 +565,7 @@ class _EpubViewState extends State<EpubView> {
     _itemPositionListener?.itemPositions.removeListener(positionScrollListener);
     scrollToPlace = lastPlace;
     didScrollToLastPlace = false;
-    _itemScrollController?.jumpTo(
+    itemScrollController?.jumpTo(
       index: lastPlace.index ?? 0,
       alignment: 0,
     );
@@ -578,7 +578,7 @@ class _EpubViewState extends State<EpubView> {
       if (position?.index == scrollToPlace?.index &&
           scrollToPlace?.index != null) {
         didScrollToLastPlace = true;
-        _itemScrollController?.jumpTo(
+        itemScrollController?.jumpTo(
           index: scrollToPlace!.index!,
           alignment: -(position?.itemTrailingEdge ?? 0) *
               (scrollToPlace?.percent ?? 0),

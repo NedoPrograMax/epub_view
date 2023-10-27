@@ -14,7 +14,7 @@ class EpubController {
 
   final String? epubCfi;
 
-  _EpubViewState? _epubViewState;
+  EpubViewState? _epubViewState;
   List<EpubViewChapter>? _cacheTableOfContents;
   EpubBook? _document;
 
@@ -31,10 +31,12 @@ class EpubController {
   final tableOfContentsListenable = ValueNotifier<List<EpubViewChapter>>([]);
 
   void jumpTo({required int index, double alignment = 0}) =>
-      _epubViewState?._itemScrollController?.jumpTo(
+      _epubViewState?.itemScrollController?.jumpTo(
         index: index,
         alignment: alignment,
       );
+
+  EpubViewState? get epubViewState => _epubViewState;
 
   Future<void>? scrollTo({
     required int index,
@@ -42,7 +44,7 @@ class EpubController {
     double alignment = 0,
     Curve curve = Curves.linear,
   }) =>
-      _epubViewState?._itemScrollController?.scrollTo(
+      _epubViewState?.itemScrollController?.scrollTo(
         index: index,
         duration: duration,
         alignment: alignment,
@@ -152,7 +154,7 @@ class EpubController {
     return startIndex;
   }
 
-  void _attach(_EpubViewState epubReaderViewState) {
+  void _attach(EpubViewState epubReaderViewState) {
     _epubViewState = epubReaderViewState;
 
     _loadDocument(document);
