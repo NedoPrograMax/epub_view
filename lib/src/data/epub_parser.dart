@@ -65,6 +65,7 @@ class EpubParser {
         }
       }
     }
+    setNodeIds(node);
   }
 
   ParseParagraphsResult parseParagraphs(
