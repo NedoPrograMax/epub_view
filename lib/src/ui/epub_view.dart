@@ -268,18 +268,17 @@ class _EpubViewState extends State<EpubView> {
     );
   }
 
-  void _onLinkPressed(String maybeHref) {
-    if (maybeHref.contains('://')) {
-      widget.onExternalLinkPressed?.call(maybeHref);
+  void _onLinkPressed(String href) {
+    if (href.contains('://')) {
+      widget.onExternalLinkPressed?.call(href);
       return;
     }
-    for (var element in hrefMap.keys) {
-      if (element == maybeHref) {
-        print(1);
-      }
+    if (href.isNotEmpty && href[0] == "#") {
+      final cutHref = href.substring(1);
+      href = hrefMap.containsKey(cutHref) ? "#${hrefMap[cutHref]!}" : href;
+    } else {
+      href = hrefMap[href] ?? href;
     }
-    final isInHref = hrefMap.containsKey(maybeHref);
-    final href = isInHref ? hrefMap[maybeHref]! : maybeHref;
 
     // Chapter01.xhtml#ph1_1 -> [ph1_1, Chapter01.xhtml] || [ph1_1]
     String? hrefIdRef;
