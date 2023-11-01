@@ -273,8 +273,8 @@ class _EpubViewState extends State<EpubView> {
       widget.onExternalLinkPressed?.call(maybeHref);
       return;
     }
-
-    final href = hrefMap[maybeHref] ?? maybeHref;
+    final isInHref = hrefMap.containsKey(maybeHref);
+    final href = isInHref ? hrefMap[maybeHref]! : maybeHref;
 
     // Chapter01.xhtml#ph1_1 -> [ph1_1, Chapter01.xhtml] || [ph1_1]
     String? hrefIdRef;
