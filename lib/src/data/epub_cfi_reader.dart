@@ -57,11 +57,12 @@ class EpubCfiReader {
     if (document == null) {
       return null;
     }
-    final element = EpubCfiInterpreter().searchLocalPathForHref(
+    /* final element = EpubCfiInterpreter().searchLocalPathForHref(
       document.documentElement,
       cfiFragment.path!.localPath!,
-    );
-    final int? paragraphNumber = getParagraphIndexByElement(element);
+    ); */
+    final int? paragraphNumber =
+        getParagraphIndexByElement(document.documentElement);
 
     return paragraphNumber;
   }
