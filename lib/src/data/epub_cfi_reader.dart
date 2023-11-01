@@ -64,7 +64,7 @@ class EpubCfiReader {
       EpubParser.setNodeIds(documentElement);
     }
     final element = EpubCfiInterpreter().searchLocalPathForHref(
-      document.documentElement,
+      documentElement,
       cfiFragment.path!.localPath!,
     );
     final int? paragraphNumber = getParagraphIndexByElement(element);
