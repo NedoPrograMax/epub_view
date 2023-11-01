@@ -52,15 +52,16 @@ class EpubParser {
   static void setNodeId(dom.Element node, Map<String, String> hrefMap) {
     if (node.id.isEmpty) {
       final ids = node.querySelectorAll('[id]').map((e) => e.id);
-      final newId = ids.firstOrNull;
-      if (newId != null) {
-        if (newId.contains("footnote")) {
-          node.id = newId;
+      final newId = ids.firstWhere(
+        (element) => element.contains("footnote"),
+        orElse: () => "not-exist",
+      );
+      if (newId != "not-exist") {
+        node.id = newId;
 
-          for (var element in ids) {
-            if (element.contains("footnote")) {
-              hrefMap[element] = newId;
-            }
+        for (var element in ids) {
+          if (element.contains("footnote")) {
+            hrefMap[element] = newId;
           }
         }
       }
