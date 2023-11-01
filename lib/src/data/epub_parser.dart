@@ -76,7 +76,6 @@ class EpubParser {
   ) {
     int? hashcode = 0;
     final List<int> chapterIndexes = [];
-    final Map<String, String> hrefMap = {};
     wordsBefore = 0;
     final paragraphs = chapters.fold<List<Paragraph>>(
       [],
