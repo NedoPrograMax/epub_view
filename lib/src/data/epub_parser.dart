@@ -23,17 +23,16 @@ class EpubParser {
       );
 
   static List<dom.Element> convertDocumentToElements(dom.Document document) =>
-      document.getElementsByTagName('body').first.children.map((element) {
-        if (element.id.isEmpty) {
-          element.id = element.querySelector('[id]')?.id ?? "";
-        }
-        return element;
-      }).toList();
+      document.getElementsByTagName('body').first.children;
 
   static List<dom.Element> _removeAllDiv(List<dom.Element> elements) {
     final List<dom.Element> result = [];
 
     for (final node in elements) {
+      if (node.id.isEmpty) {
+        node.id = node.querySelector('[id]')?.id ?? "";
+      }
+
       if (node.localName == 'div' && node.children.length > 1) {
         result.addAll(_removeAllDiv(node.children));
       } else {
