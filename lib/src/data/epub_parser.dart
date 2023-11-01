@@ -25,15 +25,16 @@ class EpubParser {
   static List<dom.Element> convertDocumentToElements(dom.Document document) =>
       document.getElementsByTagName('body').first.children;
 
-  static List<dom.Element> _removeAllDiv(List<dom.Element> elements) {
+  static List<dom.Element> _removeAllDiv(
+      List<dom.Element> elements, Map<String, String> hrefMap) {
     final List<dom.Element> result = [];
 
     for (final node in elements) {
-      setNodeId(node);
-      setNodeIds(node);
+      setNodeId(node, hrefMap);
+      setNodeIds(node, hrefMap);
 
       if (node.localName == 'div' && node.children.length > 1) {
-        result.addAll(_removeAllDiv(node.children));
+        result.addAll(_removeAllDiv(node.children, hrefMap));
       } else {
         result.add(node);
       }
@@ -42,20 +43,24 @@ class EpubParser {
     return result;
   }
 
-  static void setNodeIds(dom.Element node) {
+  static void setNodeIds(dom.Element node, Map<String, String> hrefMap) {
     for (var element in node.children) {
-      setNodeId(element);
+      setNodeId(element, hrefMap);
     }
   }
 
-  static void setNodeId(dom.Element node) {
+  static void setNodeId(dom.Element node, Map<String, String> hrefMap) {
     if (node.id.isEmpty) {
-      final newId = node.querySelector('[id]')?.id ?? "";
+      final ids = node.querySelectorAll('[id]').map((e) => e.id);
+      final newId = ids.first;
       if (newId.contains("footnote")) {
         node.id = newId;
       }
+      for (var element in ids) {
+        hrefMap[element] = newId;
+      }
     }
-    setNodeIds(node);
+    setNodeIds(node, hrefMap);
   }
 
   ParseParagraphsResult parseParagraphs(
@@ -63,6 +68,7 @@ class EpubParser {
   ) {
     int? hashcode = 0;
     final List<int> chapterIndexes = [];
+    final Map<String, String> hrefMap = {};
     wordsBefore = 0;
     final paragraphs = chapters.fold<List<Paragraph>>(
       [],
@@ -73,7 +79,7 @@ class EpubParser {
           final document = EpubCfiReader().chapterDocument(next.HtmlContent);
           if (document != null) {
             final result = convertDocumentToElements(document);
-            elmList = _removeAllDiv(result);
+            elmList = _removeAllDiv(result, hrefMap);
           }
         }
 
@@ -124,7 +130,7 @@ class EpubParser {
       },
     );
 
-    return ParseParagraphsResult(paragraphs, chapterIndexes);
+    return ParseParagraphsResult(paragraphs, chapterIndexes, hrefMap);
   }
 
   Paragraph _countParagraphAndWordsCount({
@@ -144,8 +150,13 @@ class EpubParser {
 }
 
 class ParseParagraphsResult {
-  ParseParagraphsResult(this.flatParagraphs, this.chapterIndexes);
+  ParseParagraphsResult(
+    this.flatParagraphs,
+    this.chapterIndexes,
+    this.hrefMap,
+  );
 
   final List<Paragraph> flatParagraphs;
   final List<int> chapterIndexes;
+  final Map<String, String> hrefMap;
 }

@@ -74,6 +74,7 @@ class _EpubViewState extends State<EpubView> {
   Duration paragraphDuration = Duration.zero;
   late final Repository repository;
   double paragraphStartPercent = 0;
+  Map<String, String> hrefMap = {};
 
   EpubController get _controller => widget.controller;
   bool didScrollToLastPlace = false;
@@ -127,6 +128,7 @@ class _EpubViewState extends State<EpubView> {
     _paragraphs = parseParagraphsResult.flatParagraphs;
     _syncParagraphs();
     _chapterIndexes.addAll(parseParagraphsResult.chapterIndexes);
+    hrefMap = parseParagraphsResult.hrefMap;
 
     _epubCfiReader = EpubCfiReader.parser(
       cfiInput: _controller.epubCfi,
@@ -271,6 +273,7 @@ class _EpubViewState extends State<EpubView> {
       widget.onExternalLinkPressed?.call(href);
       return;
     }
+    href = hrefMap[href] ?? href;
 
     // Chapter01.xhtml#ph1_1 -> [ph1_1, Chapter01.xhtml] || [ph1_1]
     String? hrefIdRef;
