@@ -31,7 +31,7 @@ class EpubParser {
 
     for (final node in elements) {
       setNodeId(node, hrefMap);
-      setNodeIds(node, hrefMap);
+      setNodeIds(node, {});
 
       if (node.localName == 'div' && node.children.length > 1) {
         result.addAll(_removeAllDiv(node.children, hrefMap));
