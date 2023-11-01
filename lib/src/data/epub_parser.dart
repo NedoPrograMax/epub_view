@@ -22,19 +22,20 @@ class EpubParser {
         },
       );
 
+  Map<String, String> hrefMap = {};
+
   static List<dom.Element> convertDocumentToElements(dom.Document document) =>
       document.getElementsByTagName('body').first.children;
 
-  static List<dom.Element> _removeAllDiv(
-      List<dom.Element> elements, Map<String, String> hrefMap) {
+  List<dom.Element> _removeAllDiv(List<dom.Element> elements) {
     final List<dom.Element> result = [];
 
     for (final node in elements) {
-      setNodeId(node, hrefMap);
-      setNodeIds(node, {});
+      setNodeId(node);
+      setNodeIds(node);
 
       if (node.localName == 'div' && node.children.length > 1) {
-        result.addAll(_removeAllDiv(node.children, hrefMap));
+        result.addAll(_removeAllDiv(node.children));
       } else {
         result.add(node);
       }
@@ -43,13 +44,13 @@ class EpubParser {
     return result;
   }
 
-  static void setNodeIds(dom.Element node, Map<String, String> hrefMap) {
+  void setNodeIds(dom.Element node) {
     for (var element in node.children) {
-      setNodeId(element, hrefMap);
+      setNodeId(element);
     }
   }
 
-  static void setNodeId(dom.Element node, Map<String, String> hrefMap) {
+  void setNodeId(dom.Element node) {
     if (node.id.isEmpty) {
       final ids = node.querySelectorAll('[id]').map((e) => e.id);
       final newId = ids.firstWhere(
@@ -84,7 +85,7 @@ class EpubParser {
           final document = EpubCfiReader().chapterDocument(next.HtmlContent);
           if (document != null) {
             final result = convertDocumentToElements(document);
-            elmList = _removeAllDiv(result, hrefMap);
+            elmList = _removeAllDiv(result);
           }
         }
 

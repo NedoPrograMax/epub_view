@@ -60,8 +60,8 @@ class EpubCfiReader {
     }
     final documentElement = document.documentElement;
     if (documentElement != null) {
-      EpubParser.setNodeId(documentElement, {});
-      EpubParser.setNodeIds(documentElement, {});
+      EpubParser().setNodeId(documentElement);
+      EpubParser().setNodeIds(documentElement);
     }
     final element = EpubCfiInterpreter().searchLocalPathForHref(
       documentElement,
