@@ -15,7 +15,7 @@ dependencies:
  
   equatable: ^2.0.5
   html: ^0.15.4
-  flutter_html: ^3.0.0-beta.2
+ 
   scrollable_positioned_list:
     git:
       url: https://github.com/bitstackapp/flutter.widgets.git
@@ -29,6 +29,12 @@ dependencies:
    git:
       url: https://github.com/NedoPrograMax/epubx.dart
       ref: 9794dace56091bf5c6e0bb4f5b9b613e7e9508e6 
+  flutter_html: 
+   git:
+      url: https://github.com/NedoPrograMax/flutter_html
+      ref: 72af62b8791a867fa983614da0ab322300534f88
+
+     
 
 dev_dependencies:
   flutter_test:

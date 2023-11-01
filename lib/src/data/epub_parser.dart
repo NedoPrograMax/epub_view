@@ -23,7 +23,12 @@ class EpubParser {
       );
 
   static List<dom.Element> convertDocumentToElements(dom.Document document) =>
-      document.getElementsByTagName('body').first.children;
+      document.getElementsByTagName('body').first.children.map((element) {
+        if (element.id.isEmpty) {
+          element.id = element.querySelector('[id]')?.id ?? "";
+        }
+        return element;
+      }).toList();
 
   static List<dom.Element> _removeAllDiv(List<dom.Element> elements) {
     final List<dom.Element> result = [];
