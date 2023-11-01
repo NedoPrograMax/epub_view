@@ -29,12 +29,8 @@ class EpubParser {
     final List<dom.Element> result = [];
 
     for (final node in elements) {
-      if (node.id.isEmpty) {
-        final newId = node.querySelector('[id]')?.id ?? "";
-        if (newId.contains("footnote")) {
-          node.id = newId;
-        }
-      }
+      _setNodeId(node);
+      _setNodeIds(node);
 
       if (node.localName == 'div' && node.children.length > 1) {
         result.addAll(_removeAllDiv(node.children));
@@ -44,6 +40,22 @@ class EpubParser {
     }
 
     return result;
+  }
+
+  static void _setNodeIds(dom.Element node) {
+    for (var element in node.children) {
+      _setNodeId(element);
+    }
+  }
+
+  static void _setNodeId(dom.Element node) {
+    if (node.id.isEmpty) {
+      final newId = node.querySelector('[id]')?.id ?? "";
+      if (newId.contains("footnote")) {
+        node.id = newId;
+      }
+    }
+    _setNodeIds(node);
   }
 
   ParseParagraphsResult parseParagraphs(
