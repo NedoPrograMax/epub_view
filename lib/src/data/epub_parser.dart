@@ -31,7 +31,7 @@ class EpubParser {
     final List<dom.Element> result = [];
 
     for (final node in elements) {
-      setNodeId(node);
+      setNodeId(node, true);
       setNodeIds(node);
 
       if (node.localName == 'div' && node.children.length > 1) {
@@ -50,16 +50,18 @@ class EpubParser {
     }
   }
 
-  void setNodeId(dom.Element node) {
+  void setNodeId(dom.Element node, [bool saveHref = false]) {
+    String newId = node.id;
+    final ids = node.querySelectorAll('[id]').map((e) => e.id);
     if (node.id.isEmpty) {
-      final ids = node.querySelectorAll('[id]').map((e) => e.id);
-      final newId = ids.firstWhere(
+      newId = ids.firstWhere(
         (element) => element.contains("footnote"),
         orElse: () => "not-exist",
       );
-      if (newId != "not-exist") {
-        node.id = newId;
-
+    }
+    if (newId != "not-exist") {
+      node.id = newId;
+      if (saveHref) {
         for (var element in ids) {
           if (element.contains("footnote")) {
             hrefMap[element] = newId;
