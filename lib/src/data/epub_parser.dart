@@ -30,7 +30,10 @@ class EpubParser {
 
     for (final node in elements) {
       if (node.id.isEmpty) {
-        node.id = node.querySelector('[id]')?.id ?? "";
+        final newId = node.querySelector('[id]')?.id ?? "";
+        if (newId.contains("footnote")) {
+          node.id = newId;
+        }
       }
 
       if (node.localName == 'div' && node.children.length > 1) {
