@@ -268,12 +268,13 @@ class _EpubViewState extends State<EpubView> {
     );
   }
 
-  void _onLinkPressed(String href) {
-    if (href.contains('://')) {
-      widget.onExternalLinkPressed?.call(href);
+  void _onLinkPressed(String maybeHref) {
+    if (maybeHref.contains('://')) {
+      widget.onExternalLinkPressed?.call(maybeHref);
       return;
     }
-    href = hrefMap[href] ?? href;
+
+    final href = hrefMap[maybeHref] ?? maybeHref;
 
     // Chapter01.xhtml#ph1_1 -> [ph1_1, Chapter01.xhtml] || [ph1_1]
     String? hrefIdRef;
