@@ -53,13 +53,13 @@ class EpubParser {
   void setNodeId(dom.Element node, [bool saveHref = false]) {
     String newId =
         node.id.isEmpty ? node.querySelector('[id]')?.id ?? "" : node.id;
-    if (newId.contains("footnote")) {
+    if (newId.contains("note")) {
       final ids = node.querySelectorAll('[id]').map((e) => e.id);
 
       node.id = newId;
       if (saveHref) {
         for (var element in ids) {
-          if (element.contains("footnote")) {
+          if (element.contains("note")) {
             hrefMap[element] = newId;
           }
         }
