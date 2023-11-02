@@ -435,7 +435,9 @@ class _EpubViewState extends State<EpubView> {
         ),
         alignment: Alignment.centerLeft,
         child: Text(
-          chapter.Title ?? '',
+          chapter.Title?.contains('note') == true
+              ? "Виноски"
+              : chapter.Title ?? '',
           style: const TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.w600,
