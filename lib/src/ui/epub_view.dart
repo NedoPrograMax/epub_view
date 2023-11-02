@@ -221,9 +221,9 @@ class _EpubViewState extends State<EpubView> {
     ); */
 
     _controller.currentValueListenable.value = _currentValue?.copyWith(
-        lastProgress: countedProgress,
-        scrollPosition:
-            _itemScrollController?.primaryScrollController?.position);
+      lastProgress: countedProgress,
+      scrollPosition: getCurrentScrollPosition(),
+    );
     widget.onChapterChanged?.call(_currentValue);
 
     // +10k is needed so the percent is > 0. then it -
@@ -245,6 +245,18 @@ class _EpubViewState extends State<EpubView> {
       ),
       cfi: _controller.generateEpubCfi() ?? "",
     );
+  }
+
+  ScrollPosition? getCurrentScrollPosition() {
+    try {
+      final firstPosition =
+          _itemScrollController?.primaryScrollController?.position;
+      return firstPosition;
+    } catch (_) {
+      final secondPosition =
+          _itemScrollController?.secondaryScrollController?.position;
+      return secondPosition;
+    }
   }
 
   void _gotoEpubCfi(
