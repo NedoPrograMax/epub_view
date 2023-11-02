@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:collection/collection.dart' show IterableExtension;
+import 'package:collection/collection.dart';
 import 'package:epub_view/src/data/epub_cfi_reader.dart';
 import 'package:epub_view/src/data/epub_parser.dart';
 import 'package:epub_view/src/data/models/chapter.dart';
@@ -261,15 +261,19 @@ class _EpubViewState extends State<EpubView> {
 
   void _gotoEpubCfi(
     String? epubCfi, {
+    int? paragraphIndex,
     double alignment = 0,
     Duration duration = const Duration(milliseconds: 250),
     Curve curve = Curves.linear,
   }) {
-    _epubCfiReader?.epubCfi = epubCfi;
-    final index = _epubCfiReader?.paragraphIndexByCfiFragment;
-
+    final index = paragraphIndex;
     if (index == null) {
-      return;
+      _epubCfiReader?.epubCfi = epubCfi;
+      _epubCfiReader?.paragraphIndexByCfiFragment;
+
+      if (index == null) {
+        return;
+      }
     }
 
     _itemScrollController?.scrollTo(
@@ -321,8 +325,8 @@ class _EpubViewState extends State<EpubView> {
       }
       return;
     } else {
-      final paragraph = _paragraphByIdRef(hrefIdRef);
-      final chapter =
+      final paragraphIndex = _paragraphIndexByIdRef(hrefIdRef);
+      /*final chapter =
           paragraph != null ? _chapters[paragraph.chapterIndex] : null;
 
       if (chapter != null && paragraph != null) {
@@ -333,23 +337,24 @@ class _EpubViewState extends State<EpubView> {
           chapter: chapter,
           paragraphIndex: paragraphIndex,
         );
-
-        _gotoEpubCfi(cfi);
-      }
-
-      return;
+*/
+      _gotoEpubCfi(null, paragraphIndex: paragraphIndex);
     }
+
+    return;
   }
 
-  Paragraph? _paragraphByIdRef(String idRef) =>
-      _paragraphs.firstWhereOrNull((paragraph) {
-        if (paragraph.element.id == idRef) {
-          return true;
-        }
-
-        return paragraph.element.children.isNotEmpty &&
-            paragraph.element.children[0].id == idRef;
-      });
+  int? _paragraphIndexByIdRef(String idRef) {
+    for (int i = 0; i < _paragraphs.length; i++) {
+      final paragraph = _paragraphs[i];
+      if (paragraph.element.id == idRef ||
+          (paragraph.element.children.isNotEmpty &&
+              paragraph.element.children[0].id == idRef)) {
+        return i;
+      }
+    }
+    return null;
+  }
 
   EpubChapter? _chapterByFileName(String? fileName) =>
       _chapters.firstWhereOrNull((chapter) {
