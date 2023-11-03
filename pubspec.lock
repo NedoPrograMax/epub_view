@@ -73,14 +73,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.17.3"
-  diacritic:
-    dependency: transitive
-    description:
-      name: diacritic
-      sha256: a84e03ec2779375fb86430dbe9d8fba62c68376f2499097a5f6e75556babe706
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.4"
   easy_debounce:
     dependency: "direct main"
     description:
@@ -93,8 +85,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "1716275aba0e1d401a47e18bc309738ef77acc48"
-      resolved-ref: "1716275aba0e1d401a47e18bc309738ef77acc48"
+      ref: "51f08ec2d3b7bc6bbbf6eb62176bdc738e44517b"
+      resolved-ref: "51f08ec2d3b7bc6bbbf6eb62176bdc738e44517b"
       url: "https://github.com/NedoPrograMax/epubx.dart"
     source: git
     version: "4.0.0"
@@ -157,14 +149,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.0"
-  intl:
-    dependency: transitive
-    description:
-      name: intl
-      sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.18.1"
   js:
     dependency: transitive
     description:
@@ -173,14 +157,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.7"
-  latin_crillic:
-    dependency: transitive
-    description:
-      name: latin_crillic
-      sha256: e6fb8ac07f38014526876246e2ae6f77f5c9532349a4f7b72d2ed094af827a90
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.6"
   lints:
     dependency: transitive
     description:
