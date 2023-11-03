@@ -289,12 +289,6 @@ class _EpubViewState extends State<EpubView> {
       widget.onExternalLinkPressed?.call(href);
       return;
     }
-    if (href.isNotEmpty && href[0] == "#") {
-      final cutHref = href.substring(1);
-      href = hrefMap.containsKey(cutHref) ? "#${hrefMap[cutHref]!}" : href;
-    } else {
-      href = hrefMap[href] ?? href;
-    }
 
     // Chapter01.xhtml#ph1_1 -> [ph1_1, Chapter01.xhtml] || [ph1_1]
     String? hrefIdRef;
@@ -311,6 +305,7 @@ class _EpubViewState extends State<EpubView> {
     } else {
       hrefFileName = href;
     }
+    hrefIdRef = hrefMap[hrefIdRef] ?? hrefIdRef;
 
     if (hrefIdRef == null) {
       final chapter = _chapterByFileName(hrefFileName);
