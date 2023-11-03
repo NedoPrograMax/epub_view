@@ -85,8 +85,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "150f9273b8b71f6f2d009e17eb31b995e61a2dd7"
-      resolved-ref: "150f9273b8b71f6f2d009e17eb31b995e61a2dd7"
+      ref: b698a1acf6c04fb92b4a6138b0187117f0fd5430
+      resolved-ref: b698a1acf6c04fb92b4a6138b0187117f0fd5430
       url: "https://github.com/NedoPrograMax/epubx.dart"
     source: git
     version: "4.0.0"
