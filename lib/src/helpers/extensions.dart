@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:epub_view/epub_view.dart';
 import 'package:epub_view/src/data/models/paragraph.dart';
+import 'package:html/dom.dart';
 
 extension ParagraphsExtension on List<Paragraph> {
   List<LastPlaceModel> toLastModels() {
@@ -36,4 +37,9 @@ extension EpubBookExtension on EpubBook {
         element.ContentFileName?.toLowerCase().startsWith("cover") ?? false);
     return chapters;
   }
+}
+
+extension ElementExtesnion on Element {
+  bool doesMatchId(String id) =>
+      this.id == id || (children.isNotEmpty && children[0].id == id);
 }

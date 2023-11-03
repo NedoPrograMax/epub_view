@@ -294,6 +294,7 @@ class _EpubViewState extends State<EpubView> {
 
     // Chapter01.xhtml#ph1_1 -> [ph1_1, Chapter01.xhtml] || [ph1_1]
     String? hrefIdRef;
+    String? realIdRef;
     String? hrefFileName;
 
     if (href.contains('#')) {
@@ -307,6 +308,7 @@ class _EpubViewState extends State<EpubView> {
     } else {
       hrefFileName = href;
     }
+    realIdRef = hrefIdRef;
     hrefIdRef = hrefMap[hrefIdRef] ?? hrefIdRef;
 
     if (hrefIdRef == null) {
@@ -322,7 +324,7 @@ class _EpubViewState extends State<EpubView> {
       }
       return;
     } else {
-      final paragraphIndex = _paragraphIndexByIdRef(hrefIdRef);
+      final paragraphIndex = _paragraphIndexByIdRef(hrefIdRef, realIdRef);
       /*final chapter =
           paragraph != null ? _chapters[paragraph.chapterIndex] : null;
 
@@ -341,16 +343,18 @@ class _EpubViewState extends State<EpubView> {
     return;
   }
 
-  int? _paragraphIndexByIdRef(String idRef) {
+  int? _paragraphIndexByIdRef(String idRef, realIdRef) {
+    int? maybeId;
     for (int i = 0; i < _paragraphs.length; i++) {
       final paragraph = _paragraphs[i];
-      if (paragraph.element.id == idRef ||
-          (paragraph.element.children.isNotEmpty &&
-              paragraph.element.children[0].id == idRef)) {
+      if (paragraph.element.doesMatchId(realIdRef)) {
         return i;
       }
+      if (paragraph.element.doesMatchId(idRef)) {
+        maybeId = i;
+      }
     }
-    return null;
+    return maybeId;
   }
 
   EpubChapter? _chapterByFileName(String? fileName) =>
