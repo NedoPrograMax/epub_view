@@ -290,6 +290,8 @@ class _EpubViewState extends State<EpubView> {
       return;
     }
 
+    href = hrefMap[href] ?? href;
+
     // Chapter01.xhtml#ph1_1 -> [ph1_1, Chapter01.xhtml] || [ph1_1]
     String? hrefIdRef;
     String? hrefFileName;
