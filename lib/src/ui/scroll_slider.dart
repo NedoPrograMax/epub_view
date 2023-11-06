@@ -23,8 +23,6 @@ class _ScrollSliderState extends State<ScrollSlider> {
 
   @override
   void initState() {
-    widget.currentPercent.value =
-        widget.controller.currentValue?.lastProgress ?? 0;
     widget.controller.currentValueListenable.addListener(controllerListener);
     super.initState();
   }
