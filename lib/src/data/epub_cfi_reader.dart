@@ -151,7 +151,7 @@ class EpubCfiReader {
     );
     final matches = regExp.firstMatch(html)!;
 
-    return parse(matches.group(0));
+    return parse(matches.input);
   }
 
   int? _getChapterIndexBy({CfiStep? cfiStep}) {
