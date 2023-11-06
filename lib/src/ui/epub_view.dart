@@ -513,6 +513,7 @@ class _EpubViewState extends State<EpubView> {
         itemCount: _paragraphs.length,
         itemScrollController: _itemScrollController,
         itemPositionsListener: _itemPositionListener,
+        addAutomaticKeepAlives: false,
         itemBuilder: (BuildContext context, int index) {
           return widget.builders.chapterBuilder(
             context,
