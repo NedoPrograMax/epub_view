@@ -66,7 +66,7 @@ class EpubViewTableOfContents extends StatelessWidget {
                                   index,
                                   data[index],
                                   data.length,
-                                  index ==
+                                  index + 1 ==
                                       controller.currentValue?.chapterNumber,
                                 ) ??
                                 ListTile(
