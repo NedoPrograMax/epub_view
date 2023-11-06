@@ -154,7 +154,7 @@ class _EpubViewState extends State<EpubView> {
   }
 
   void _changeListener() {
-    EasyDebounce.debounce(scrollTag, const Duration(seconds: 1), () {
+    EasyDebounce.debounce(scrollTag, const Duration(milliseconds: 100), () {
       final result = countResult();
       if (result != null) {
         repository.addData(result);
@@ -250,7 +250,6 @@ class _EpubViewState extends State<EpubView> {
       realProgress: countRealProgress(
         _paragraphs,
       ),
-      cfi: _controller.generateEpubCfi() ?? "",
     );
   }
 
