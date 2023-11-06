@@ -22,9 +22,12 @@ class EpubViewTableOfContents extends StatelessWidget {
     int index,
     EpubViewChapter chapter,
     int itemCount,
+    bool isSelected,
   )? itemBuilder;
   final Widget? loader;
-  final Widget Function(String title)? titleBuilder;
+  final Widget Function(
+    String title,
+  )? titleBuilder;
 
   @override
   Widget build(BuildContext context) =>
@@ -59,7 +62,13 @@ class EpubViewTableOfContents extends StatelessWidget {
                           },
                           child: Ink(
                             child: itemBuilder?.call(
-                                    context, index, data[index], data.length) ??
+                                  context,
+                                  index,
+                                  data[index],
+                                  data.length,
+                                  index ==
+                                      controller.currentValue?.chapterNumber,
+                                ) ??
                                 ListTile(
                                   title: Text(data[index].title!.trim()),
                                 ),
