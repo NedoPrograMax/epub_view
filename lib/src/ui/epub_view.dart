@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:collection/collection.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:epub_view/src/data/epub_cfi_reader.dart';
 import 'package:epub_view/src/data/epub_parser.dart';
 import 'package:epub_view/src/data/models/chapter.dart';
@@ -75,6 +76,7 @@ class _EpubViewState extends State<EpubView> {
   late final Repository repository;
   double paragraphStartPercent = 0;
   Map<String, String> hrefMap = {};
+  final scrollTag = "scrollTag";
 
   EpubController get _controller => widget.controller;
   bool didScrollToLastPlace = false;
@@ -113,6 +115,7 @@ class _EpubViewState extends State<EpubView> {
     _itemPositionListener!.itemPositions.removeListener(_changeListener);
     _controller._detach();
     repository.closeStream();
+    EasyDebounce.cancel(scrollTag);
 
     super.dispose();
   }
@@ -151,10 +154,12 @@ class _EpubViewState extends State<EpubView> {
   }
 
   void _changeListener() {
-    final result = countResult();
-    if (result != null) {
-      repository.addData(result);
-    }
+    EasyDebounce.debounce(scrollTag, const Duration(seconds: 1), () {
+      final result = countResult();
+      if (result != null) {
+        repository.addData(result);
+      }
+    });
   }
 
   ReaderResult? countResult() {
@@ -227,8 +232,10 @@ class _EpubViewState extends State<EpubView> {
     widget.onChapterChanged?.call(_currentValue);
 
     // +10k is needed so the percent is > 0. then it -
+    final convertedPercent =
+        convertProgressToSmallModel(position.itemLeadingEdge);
     final countedLastPlace = LastPlaceModel(
-      percent: convertProgressToSmallModel(position.itemLeadingEdge),
+      percent: convertedPercent,
       index: position.index + 1,
     );
     /*  final lastPlace = repository.lastReadResult.lastPlace == null ||
