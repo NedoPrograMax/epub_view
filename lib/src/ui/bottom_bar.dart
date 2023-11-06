@@ -26,8 +26,9 @@ class _EpubViewBottomBarState extends State<EpubViewBottomBar> {
 
   @override
   void initState() {
-    currentPercent =
-        ValueNotifier(widget.controller.currentValue?.lastProgress ?? 0);
+    currentPercent = ValueNotifier(
+        widget.controller.currentValue?.lastProgress ??
+            widget.controller.lastResult.lastProgress);
     scrollListenable = widget.controller.currentValueListenable
       ..addListener(scrollListener);
     super.initState();
