@@ -28,7 +28,7 @@ dependencies:
   epubx:
    git:
       url: https://github.com/NedoPrograMax/epubx.dart
-      ref: 564dacda7b8964442aa9a06e6ceb65f094f89d11 
+      ref: d0c13e9c782a2f07eaeeac1ecc6c1869107ae1a8 
   flutter_html: 
    git:
       url: https://github.com/NedoPrograMax/flutter_html
