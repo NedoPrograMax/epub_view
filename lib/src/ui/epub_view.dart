@@ -433,6 +433,17 @@ class _EpubViewState extends State<EpubView> {
     return posIndex;
   }
 
+  static String titleToNormal(String title, String ifNormal) {
+    switch (title) {
+      case '\$begin-found-in-directory\$':
+        return "Початок";
+      case '\$notes-found-in-directory\$':
+        return "Виноски";
+      default:
+        return ifNormal;
+    }
+  }
+
   static Widget _chapterDividerBuilder(EpubChapter chapter) => Container(
         height: 56,
         width: double.infinity,
@@ -442,9 +453,7 @@ class _EpubViewState extends State<EpubView> {
         ),
         alignment: Alignment.centerLeft,
         child: Text(
-          chapter.Title == '\$notes-found-in-directory\$'
-              ? "Виноски"
-              : chapter.Title ?? '',
+          titleToNormal(chapter.Title ?? "", chapter.Title ?? ""),
           style: const TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.w600,
