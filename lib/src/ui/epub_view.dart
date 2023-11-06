@@ -282,11 +282,11 @@ class _EpubViewState extends State<EpubView> {
       }
     }
 
-    _itemScrollController?.scrollTo(
+    _itemScrollController?.jumpTo(
       index: index,
-      duration: duration,
+      // duration: duration,
       alignment: alignment,
-      curve: curve,
+      //  curve: curve,
     );
   }
 
