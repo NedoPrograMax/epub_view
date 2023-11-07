@@ -515,6 +515,15 @@ class _EpubViewState extends State<EpubView> {
     );
   }
 
+  Uint8List getImageNoMatterCode(
+      String url, Map<String, EpubByteContentFile> images) {
+    if (images.containsKey(url)) {
+      return Uint8List.fromList(images[url]!.Content!);
+    }
+    final codedUrl = Uri.encodeFull(url);
+    return Uint8List.fromList(images[codedUrl]!.Content!);
+  }
+
   Widget _buildLoaded(BuildContext context) {
     return MediaQuery.removePadding(
       context: context,
