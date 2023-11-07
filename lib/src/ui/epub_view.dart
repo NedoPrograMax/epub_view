@@ -518,11 +518,32 @@ class _EpubViewState extends State<EpubView> {
 
   static Uint8List getImageNoMatterCode(
       String url, Map<String, EpubByteContentFile> images) {
+    late final EpubByteContentFile image;
+
     if (images.containsKey(url)) {
-      return Uint8List.fromList(images[url]!.Content!);
+      image = images[url]!;
+    } else {
+      final codedUrl = Uri.encodeFull(url);
+      if (images.containsKey(codedUrl)) {
+        image = images[url]!;
+      } else {
+        final fileName = getFileName(url);
+        images.forEach((key, value) {
+          if (getFileName(key) == fileName) {
+            image = value;
+            return;
+          }
+        });
+      }
     }
-    final codedUrl = Uri.encodeFull(url);
-    return Uint8List.fromList(images[codedUrl]!.Content!);
+
+    return Uint8List.fromList(image.Content!);
+  }
+
+  static String getFileName(String path) {
+    final uri = Uri.parse(path);
+    final fileName = uri.pathSegments.last;
+    return fileName;
   }
 
   Widget _buildLoaded(BuildContext context) {
