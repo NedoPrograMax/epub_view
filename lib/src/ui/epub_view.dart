@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:collection/collection.dart';
-import 'package:easy_debounce/easy_debounce.dart';
 import 'package:epub_view/src/data/epub_cfi_reader.dart';
 import 'package:epub_view/src/data/epub_parser.dart';
 import 'package:epub_view/src/data/models/chapter.dart';
@@ -115,7 +114,7 @@ class _EpubViewState extends State<EpubView> {
     _itemPositionListener!.itemPositions.removeListener(_changeListener);
     _controller._detach();
     repository.closeStream();
-    EasyDebounce.cancel(scrollTag);
+    // EasyDebounce.cancel(scrollTag);
 
     super.dispose();
   }
@@ -154,12 +153,12 @@ class _EpubViewState extends State<EpubView> {
   }
 
   void _changeListener() {
-    EasyDebounce.debounce(scrollTag, const Duration(milliseconds: 100), () {
-      final result = countResult();
-      if (result != null) {
-        repository.addData(result);
-      }
-    });
+    // EasyDebounce.debounce(scrollTag, const Duration(milliseconds: 100), () {
+    final result = countResult();
+    if (result != null) {
+      repository.addData(result);
+    }
+    //   });
   }
 
   ReaderResult? countResult() {
