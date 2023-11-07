@@ -502,8 +502,9 @@ class _EpubViewState extends State<EpubView> {
               builder: (imageContext) {
                 final url =
                     imageContext.attributes['src']!.replaceAll('../', '');
-                final content = Uint8List.fromList(
-                    document.Content!.Images![url]!.Content!);
+                final content =
+                    getImageNoMatterCode(url, document.Content!.Images!);
+
                 return Image(
                   image: MemoryImage(content),
                 );
@@ -515,7 +516,7 @@ class _EpubViewState extends State<EpubView> {
     );
   }
 
-  Uint8List getImageNoMatterCode(
+  static Uint8List getImageNoMatterCode(
       String url, Map<String, EpubByteContentFile> images) {
     if (images.containsKey(url)) {
       return Uint8List.fromList(images[url]!.Content!);
