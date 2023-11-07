@@ -143,15 +143,15 @@ class EpubCfiReader {
     final html = chapterContent.replaceAllMapped(
         RegExp(r'<\s*([^\s>]+)([^>]*)\/\s*>'),
         (match) => '<${match.group(1)}${match.group(2)}></${match.group(1)}>');
-    final regExp = RegExp(
+    /*  final regExp = RegExp(
       r'<body.*?>.+?</body>',
       caseSensitive: false,
       multiLine: true,
       dotAll: true,
     );
-    final matches = regExp.firstMatch(html)!;
+    final matches = regExp.firstMatch(html)!; */
 
-    return parse(matches.input);
+    return parse(html);
   }
 
   int? _getChapterIndexBy({CfiStep? cfiStep}) {
