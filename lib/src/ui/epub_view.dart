@@ -157,8 +157,20 @@ class _EpubViewState extends State<EpubView> {
     final result = countResult();
     if (result != null) {
       repository.addData(result);
-    } 
+    }
     //   });
+  }
+
+  ItemPosition getCurrentPosition() {
+    final positions = _itemPositionListener!.itemPositions.value;
+    final sortedPositions = positions
+        .sorted((a, b) => a.itemLeadingEdge.compareTo(b.itemLeadingEdge));
+    final topMostPosition = sortedPositions.firstWhere(
+      (element) => element.itemLeadingEdge <= 0 && element.itemTrailingEdge > 0,
+      orElse: () => sortedPositions.last,
+    );
+
+    return topMostPosition;
   }
 
   ReaderResult? countResult() {
@@ -167,7 +179,7 @@ class _EpubViewState extends State<EpubView> {
       return null;
     }
 
-    final position = _itemPositionListener!.itemPositions.value.first;
+    final position = getCurrentPosition();
     final chapterIndex = _getChapterIndexBy(
       positionIndex: position.index,
       trailingEdge: position.itemTrailingEdge,
@@ -651,14 +663,14 @@ class _EpubViewState extends State<EpubView> {
 
   void positionScrollListener() async {
     if (!didScrollToLastPlace) {
-      final position = _itemPositionListener?.itemPositions.value.first;
-      if (position?.index == scrollToPlace?.index &&
+      final position = getCurrentPosition();
+      if (position.index == scrollToPlace?.index &&
           scrollToPlace?.index != null) {
         didScrollToLastPlace = true;
         _itemScrollController?.jumpTo(
           index: scrollToPlace!.index!,
-          alignment: -(position?.itemTrailingEdge ?? 0) *
-              (scrollToPlace?.percent ?? 0),
+          alignment:
+              -(position.itemTrailingEdge ?? 0) * (scrollToPlace?.percent ?? 0),
         );
       }
     }
