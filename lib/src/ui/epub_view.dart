@@ -154,10 +154,10 @@ class _EpubViewState extends State<EpubView> {
 
   void _changeListener() {
     // EasyDebounce.debounce(scrollTag, const Duration(milliseconds: 100), () {
-    final result = countResult();
+ /*   final result = countResult();
     if (result != null) {
       repository.addData(result);
-    }
+    } */
     //   });
   }
 
