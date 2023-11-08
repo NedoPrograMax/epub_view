@@ -35,8 +35,12 @@ class EpubChapterViewValue {
   /// Chapter view in percents
   double get progress {
     final itemLeadingEdgeAbsolute = position.itemLeadingEdge.abs();
-    final fullHeight = itemLeadingEdgeAbsolute + position.itemTrailingEdge;
-    final heightPercent = fullHeight / 100;
-    return itemLeadingEdgeAbsolute / heightPercent;
+    final itemTrailingEdgeAbsolute = position.itemTrailingEdge.abs();
+    final positionHeight = itemTrailingEdgeAbsolute - itemLeadingEdgeAbsolute;
+    final positionVisiblePart = 1.0 - itemLeadingEdgeAbsolute;
+    final progress = positionVisiblePart / positionHeight;
+    final percent = progress * 100.0;
+
+    return percent;
   }
 }
