@@ -225,12 +225,17 @@ class _EpubViewState extends State<EpubView> {
     paragraph.percent = max(paragraph.percent, currentPercentWithTime);
 
     lastChangeTime = DateTime.now();
-    final countedProgress = countUserProgress(
-      _paragraphs,
-      chapterNumber: chapterIndex,
-      paragraphNumber: paragraphAbsIndex,
-      lastPercent: viewPercent,
-    );
+    final currentScrollPosition = getCurrentScrollPosition();
+    final isTheEnd = currentScrollPosition?.atEdge == true &&
+        currentScrollPosition?.pixels == currentScrollPosition?.maxScrollExtent;
+    final countedProgress = isTheEnd
+        ? 1.0
+        : countUserProgress(
+            _paragraphs,
+            chapterNumber: chapterIndex,
+            paragraphNumber: paragraphAbsIndex,
+            lastPercent: viewPercent,
+          );
     /* final userProgress = max(
       countedProgress,
       repository.lastReadResult.lastProgress,
@@ -238,7 +243,7 @@ class _EpubViewState extends State<EpubView> {
 
     _controller.currentValueListenable.value = _currentValue?.copyWith(
       lastProgress: countedProgress,
-      scrollPosition: getCurrentScrollPosition(),
+      scrollPosition: currentScrollPosition,
     );
     widget.onChapterChanged?.call(_currentValue);
 
