@@ -23,8 +23,8 @@ export 'package:epubx/epubx.dart' hide Image;
 part '../epub_controller.dart';
 part '../helpers/epub_view_builders.dart';
 
-const _minTrailingEdge = 0.55;
-const _minLeadingEdge = -0.05;
+//const _minTrailingEdge = 0.55;
+//const _minLeadingEdge = -0.05;
 
 typedef ExternalLinkPressed = void Function(String href);
 
@@ -434,12 +434,12 @@ class _EpubViewState extends State<EpubView> {
     double? leadingEdge,
   }) {
     int posIndex = positionIndex;
-    if (trailingEdge != null &&
+    /*   if (trailingEdge != null &&
         leadingEdge != null &&
         trailingEdge < _minTrailingEdge &&
         leadingEdge < _minLeadingEdge) {
       posIndex += 1;
-    }
+    } */
 
     return posIndex;
   }
