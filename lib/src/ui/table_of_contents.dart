@@ -39,14 +39,17 @@ class EpubViewTableOfContents extends StatelessWidget {
           if (data.isNotEmpty) {
             content = Padding(
               padding: EdgeInsets.only(
-                left: 12,
-                top: MediaQuery.of(context).padding.top + 4,
+                top: MediaQuery.of(context).padding.top + 16,
               ),
               child: Column(
                 children: [
-                  titleBuilder?.call(controller.getDocument()?.Title ?? "") ??
-                      Text(controller.getDocument()?.Title ?? ""),
-                  const SizedBox(height: 6),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: titleBuilder
+                            ?.call(controller.getDocument()?.Title ?? "") ??
+                        Text(controller.getDocument()?.Title ?? ""),
+                  ),
+                  const SizedBox(height: 16),
                   Expanded(
                     child: ListView.builder(
                       padding: EdgeInsets.zero,
