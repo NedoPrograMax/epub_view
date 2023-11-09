@@ -28,7 +28,7 @@ dependencies:
   epubx:
    git:
       url: https://github.com/NedoPrograMax/epubx.dart
-      ref: e2dfe7c313c28c5c48a51e483a599bc539414827 
+      ref: 7445f66cca602dfc056761844a67570ecb9c4a99 
   flutter_html: 
    git:
       url: https://github.com/NedoPrograMax/flutter_html
@@ -40,4 +40,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.2
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/
+    - assets/test-book.epub
 

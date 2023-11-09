@@ -5,10 +5,10 @@ packages:
     dependency: transitive
     description:
       name: archive
-      sha256: "20071638cbe4e5964a427cfa0e86dce55d060bc7d82d56f3554095d7239a8765"
+      sha256: "7b875fd4a20b165a3084bd2d210439b22ebc653f21cea4842729c0c30c82596b"
       url: "https://pub.dev"
     source: hosted
-    version: "3.4.2"
+    version: "3.4.9"
   async:
     dependency: transitive
     description:
@@ -92,8 +92,8 @@ packages:
     dependency: transitive
     description:
       path: "."
-      ref: e2dfe7c313c28c5c48a51e483a599bc539414827
-      resolved-ref: e2dfe7c313c28c5c48a51e483a599bc539414827
+      ref: "7445f66cca602dfc056761844a67570ecb9c4a99"
+      resolved-ref: "7445f66cca602dfc056761844a67570ecb9c4a99"
       url: "https://github.com/NedoPrograMax/epubx.dart"
     source: git
     version: "4.0.0"
