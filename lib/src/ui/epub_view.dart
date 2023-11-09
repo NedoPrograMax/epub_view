@@ -306,6 +306,16 @@ class _EpubViewState extends State<EpubView> {
     );
   }
 
+  int _getChapterStartIndex(EpubChapter chapter) {
+    final index = _chapters.indexOf(chapter);
+    if (index != -1) {
+      final startIndex =
+          index < _chapterIndexes.length ? _chapterIndexes[index] : 0;
+      return startIndex;
+    }
+    return -1;
+  }
+
   void _onLinkPressed(String href) {
     if (href.contains('://')) {
       widget.onExternalLinkPressed?.call(href);
@@ -335,14 +345,20 @@ class _EpubViewState extends State<EpubView> {
 
     if (hrefIdRef == null) {
       final chapter = _chapterByFileName(hrefFileName);
-      if (chapter != null) {
-        final cfi = _epubCfiReader?.generateCfiChapter(
-          book: _controller._document,
-          chapter: chapter,
-          additional: ['/4/2'],
-        );
 
-        _gotoEpubCfi(cfi);
+      if (chapter != null) {
+        final startIndex = _getChapterStartIndex(chapter);
+        if (startIndex != -1) {
+          _gotoEpubCfi(null, paragraphIndex: startIndex);
+        } else {
+          final cfi = _epubCfiReader?.generateCfiChapter(
+            book: _controller._document,
+            chapter: chapter,
+            additional: ['/4/2'],
+          );
+
+          _gotoEpubCfi(cfi);
+        }
       }
       return;
     } else {
