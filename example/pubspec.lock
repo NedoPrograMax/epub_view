@@ -92,8 +92,8 @@ packages:
     dependency: transitive
     description:
       path: "."
-      ref: "7445f66cca602dfc056761844a67570ecb9c4a99"
-      resolved-ref: "7445f66cca602dfc056761844a67570ecb9c4a99"
+      ref: c5999e2374f717565ea780c15aec2a33865dc417
+      resolved-ref: c5999e2374f717565ea780c15aec2a33865dc417
       url: "https://github.com/NedoPrograMax/epubx.dart"
     source: git
     version: "4.0.0"
