@@ -12,6 +12,7 @@ import 'package:epub_view/src/data/models/reader_result.dart';
 import 'package:epub_view/src/data/repository.dart';
 import 'package:epub_view/src/helpers/extensions.dart';
 import 'package:epub_view/src/helpers/utils.dart';
+import 'package:epub_view/src/ui/chapter_divider.dart';
 import 'package:epub_view/src/ui/reader_test_selection_toolbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -465,33 +466,8 @@ class _EpubViewState extends State<EpubView> {
     return posIndex;
   }
 
-  static String titleToNormal(String title, String ifNormal) {
-    switch (title) {
-      case '\$begin-found-in-directory\$':
-        return "Початок";
-      case '\$notes-found-in-directory\$':
-        return "Виноски";
-      default:
-        return ifNormal;
-    }
-  }
-
-  static Widget _chapterDividerBuilder(EpubChapter chapter) => Container(
-        height: 56,
-        width: double.infinity,
-        padding: const EdgeInsets.all(16),
-        decoration: const BoxDecoration(
-          color: Color(0x24000000),
-        ),
-        alignment: Alignment.centerLeft,
-        child: Text(
-          titleToNormal(chapter.Title ?? "", chapter.Title ?? ""),
-          style: const TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      );
+  static Widget _chapterDividerBuilder(EpubChapter chapter) =>
+      ChapterDivider(title: chapter.Title ?? "");
 
   static Widget _chapterBuilder(
     BuildContext context,
