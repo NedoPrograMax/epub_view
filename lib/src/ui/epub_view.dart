@@ -467,7 +467,7 @@ class _EpubViewState extends State<EpubView> {
   }
 
   static Widget _chapterDividerBuilder(EpubChapter chapter) =>
-      ChapterDivider(title: chapter.Title ?? "");
+      EpubChapterDivider(title: chapter.Title ?? "");
 
   static Widget _chapterBuilder(
     BuildContext context,

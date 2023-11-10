@@ -10,11 +10,15 @@ class EpubDocument {
   static Future<EpubBook> openAsset(String assetName) async {
     final byteData = await rootBundle.load(assetName);
     final bytes = byteData.buffer.asUint8List();
-    return EpubReader.readBook(bytes);
+    final book = compute<Uint8List, EpubBook>(
+        (bytes) => EpubReader.readBook(bytes), bytes);
+    return book;
   }
 
   static Future<EpubBook> openData(Uint8List bytes) async {
-    return EpubReader.readBook(bytes);
+    final book = compute<Uint8List, EpubBook>(
+        (bytes) => EpubReader.readBook(bytes), bytes);
+    return book;
   }
 
   static Future<EpubBook> openFile(File file) async {

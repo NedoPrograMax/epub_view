@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class ChapterDivider extends StatelessWidget {
+class EpubChapterDivider extends StatelessWidget {
   final String title;
-  const ChapterDivider({required this.title, super.key});
+  const EpubChapterDivider({required this.title, super.key});
 
   @override
   Widget build(BuildContext context) {
