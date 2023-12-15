@@ -87,7 +87,7 @@ class _EpubViewState extends State<EpubView> {
   void initState() {
     super.initState();
     _itemScrollController = ItemScrollController();
-    _itemScrollController!.scrollListener(_scrollListener);
+
     _itemPositionListener = ItemPositionsListener.create();
     _controller._attach(this);
     _controller.loadingState.addListener(() {
@@ -277,6 +277,9 @@ class _EpubViewState extends State<EpubView> {
   }
 
   ScrollPosition? getCurrentScrollPosition() {
+    if (lastScrollPosition == null) {
+      _itemScrollController!.scrollListener(_scrollListener);
+    }
     return lastScrollPosition;
   }
 
