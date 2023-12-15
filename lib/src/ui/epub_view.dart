@@ -17,7 +17,7 @@ import 'package:epub_view/src/ui/reader_test_selection_toolbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:scrollable_positioned_list_extended/scrollable_positioned_list_extended.dart';
 
 export 'package:epubx/epubx.dart' hide Image;
 
@@ -81,11 +81,13 @@ class _EpubViewState extends State<EpubView> {
   EpubController get _controller => widget.controller;
   bool didScrollToLastPlace = false;
   LastPlaceModel? scrollToPlace;
+  ScrollPosition? lastScrollPosition;
 
   @override
   void initState() {
     super.initState();
     _itemScrollController = ItemScrollController();
+    _itemScrollController!.scrollListener(_scrollListener);
     _itemPositionListener = ItemPositionsListener.create();
     _controller._attach(this);
     _controller.loadingState.addListener(() {
@@ -118,6 +120,10 @@ class _EpubViewState extends State<EpubView> {
     // EasyDebounce.cancel(scrollTag);
 
     super.dispose();
+  }
+
+  void _scrollListener(ScrollNotifier notification) {
+    lastScrollPosition = notification.position;
   }
 
   Future<bool> _init() async {
@@ -271,15 +277,7 @@ class _EpubViewState extends State<EpubView> {
   }
 
   ScrollPosition? getCurrentScrollPosition() {
-    try {
-      final firstPosition =
-          _itemScrollController?.primaryScrollController?.position;
-      return firstPosition;
-    } catch (_) {
-      final secondPosition =
-          _itemScrollController?.secondaryScrollController?.position;
-      return secondPosition;
-    }
+    return lastScrollPosition;
   }
 
   void _gotoEpubCfi(

@@ -1,6 +1,6 @@
 import 'package:epub_view/src/data/epub_parser.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:scrollable_positioned_list_extended/scrollable_positioned_list_extended.dart';
 
 export 'package:epubx/epubx.dart' hide Image;
 

@@ -16,11 +16,7 @@ dependencies:
   equatable: ^2.0.5
   html: ^0.15.4
  
-  scrollable_positioned_list:
-    git:
-      url: https://github.com/bitstackapp/flutter.widgets.git
-      ref: master
-      path: packages/scrollable_positioned_list/
+  scrollable_positioned_list_extended: ^0.3.9
   collection: ^1.17.1
   universal_file: ^1.0.0
   rxdart: ^0.27.7
