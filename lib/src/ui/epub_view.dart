@@ -533,7 +533,7 @@ class _EpubViewState extends State<EpubView> {
     } else {
       final codedUrl = Uri.encodeFull(url);
       if (images.containsKey(codedUrl)) {
-        image = images[url]!;
+        image = images[codedUrl]!;
       } else {
         final fileName = getFileName(url);
         images.forEach((key, value) {
