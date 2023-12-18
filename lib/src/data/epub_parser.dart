@@ -12,12 +12,24 @@ export 'package:epubx/epubx.dart' hide Image;
 
 class EpubParser {
   int wordsBefore = 0;
+
+  static List<EpubChapter> getAllSubChapters(EpubChapter chapter) {
+    final list = [chapter];
+    if (chapter.SubChapters?.isNotEmpty == true) {
+      for (int i = 0; i < chapter.SubChapters!.length; i++) {
+        final subChapter = chapter.SubChapters![i];
+        list.addAll(getAllSubChapters(subChapter));
+      }
+    }
+    return list;
+  }
+
   static List<EpubChapter> parseChapters(EpubBook epubBook) =>
       epubBook.getRealChaptersOrCreated().fold<List<EpubChapter>>(
         [],
         (acc, next) {
-          acc.add(next);
-          next.SubChapters?.forEach(acc.add);
+          acc.addAll(getAllSubChapters(next));
+
           return acc;
         },
       );
