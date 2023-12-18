@@ -5,7 +5,6 @@ class EpubController {
     required this.document,
     required this.lastResult,
     required this.onSave,
-
     this.epubCfi,
   });
 
@@ -30,8 +29,6 @@ class EpubController {
   final currentValueListenable = ValueNotifier<EpubChapterViewValue?>(null);
 
   final tableOfContentsListenable = ValueNotifier<List<EpubViewChapter>>([]);
-
-
 
   void jumpTo({required int index, double alignment = 0}) =>
       _epubViewState?._itemScrollController?.jumpTo(
@@ -107,8 +104,10 @@ class EpubController {
       [],
       (acc, next) {
         index += 1;
+        final subChapters =
+            EpubParser.getAllSubChapters(next, includeChapter: false);
         acc.add(EpubViewChapter(next.Title, _getChapterStartIndex(index)));
-        for (final subChapter in next.SubChapters ?? []) {
+        for (final subChapter in subChapters) {
           index += 1;
           acc.add(EpubViewSubChapter(
               subChapter.Title, _getChapterStartIndex(index)));
