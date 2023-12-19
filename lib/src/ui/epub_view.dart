@@ -520,7 +520,7 @@ class _EpubViewState extends State<EpubView> {
               },
             ),
             TagExtension(
-              tagsToExtend: {"image"},
+              tagsToExtend: {"image", "svg"},
               builder: (imageContext) {
                 final url = imageContext.attributes['xlink:href']!
                     .replaceAll('../', '');
