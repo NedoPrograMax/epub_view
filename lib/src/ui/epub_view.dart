@@ -18,6 +18,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:html/dom.dart' as dom;
 import 'package:scrollable_positioned_list_extended/scrollable_positioned_list_extended.dart';
 
 export 'package:epubx/epubx.dart' hide Image;
@@ -525,9 +526,15 @@ class _EpubViewState extends State<EpubView> {
                 try {
                   final imageTag = imageContext.elementChildren
                       .firstWhere((element) => element.localName == 'image');
-
+                  final attributeKey = imageTag.attributes.keys.firstWhere(
+                    (element) =>
+                        element is dom.AttributeName &&
+                            element.name == "href" &&
+                            element.prefix == "xlink" ||
+                        element == "xlink:href",
+                  );
                   final url =
-                      imageTag.attributes['xlink:href']!.replaceAll('../', '');
+                      imageTag.attributes[attributeKey]!.replaceAll('../', '');
 
                   return displayImage(url, document.Content!.Images!);
                 } catch (_) {
