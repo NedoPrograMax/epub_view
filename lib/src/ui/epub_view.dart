@@ -519,6 +519,19 @@ class _EpubViewState extends State<EpubView> {
                 );
               },
             ),
+            TagExtension(
+              tagsToExtend: {"image"},
+              builder: (imageContext) {
+                final url = imageContext.attributes['xlink:href']!
+                    .replaceAll('../', '');
+                final content =
+                    getImageNoMatterCode(url, document.Content!.Images!);
+
+                return Image(
+                  image: MemoryImage(content),
+                );
+              },
+            ),
           ],
         ),
       ],
