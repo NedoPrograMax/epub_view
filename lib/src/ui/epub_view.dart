@@ -17,6 +17,7 @@ import 'package:epub_view/src/ui/reader_test_selection_toolbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:scrollable_positioned_list_extended/scrollable_positioned_list_extended.dart';
 
 export 'package:epubx/epubx.dart' hide Image;
@@ -509,33 +510,47 @@ class _EpubViewState extends State<EpubView> {
             TagExtension(
               tagsToExtend: {"img"},
               builder: (imageContext) {
-                final url =
-                    imageContext.attributes['src']!.replaceAll('../', '');
-                final content =
-                    getImageNoMatterCode(url, document.Content!.Images!);
-
-                return Image(
-                  image: MemoryImage(content),
-                );
+                try {
+                  final url =
+                      imageContext.attributes['src']!.replaceAll('../', '');
+                  return displayImage(url, document.Content!.Images!);
+                } catch (_) {
+                  return const Text("Couldn't display the image");
+                }
               },
             ),
             TagExtension(
-              tagsToExtend: {"image", "svg"},
+              tagsToExtend: {"svg"},
               builder: (imageContext) {
-                final url = imageContext.attributes['xlink:href']!
-                    .replaceAll('../', '');
-                final content =
-                    getImageNoMatterCode(url, document.Content!.Images!);
+                try {
+                  final imageTag = imageContext.elementChildren
+                      .firstWhere((element) => element.localName == 'image');
 
-                return Image(
-                  image: MemoryImage(content),
-                );
+                  final url =
+                      imageTag.attributes['xlink:href']!.replaceAll('../', '');
+
+                  return displayImage(url, document.Content!.Images!);
+                } catch (_) {
+                  return const Text("Couldn't display the image");
+                }
               },
             ),
           ],
         ),
       ],
     );
+  }
+
+  static Widget displayImage(
+      String url, Map<String, EpubByteContentFile> images) {
+    final content = getImageNoMatterCode(url, images);
+    if (url.endsWith('svg')) {
+      return SvgPicture.memory(content);
+    } else {
+      return Image(
+        image: MemoryImage(content),
+      );
+    }
   }
 
   static Uint8List getImageNoMatterCode(

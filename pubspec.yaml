@@ -30,6 +30,7 @@ dependencies:
    git:
       url: https://github.com/NedoPrograMax/flutter_html
       ref: 72af62b8791a867fa983614da0ab322300534f88
+  flutter_svg: ^2.0.9
 
      
 
