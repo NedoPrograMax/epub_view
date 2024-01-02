@@ -22,7 +22,7 @@ class ReaderTextSelectionToolbar extends StatelessWidget {
             context,
             buttonItem,
           ),
-          onTap: buttonItem.onPressed,
+          onTap: buttonItem.onPressed ?? () {},
         );
       }).toList(),
     );
