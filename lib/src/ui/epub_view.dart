@@ -22,6 +22,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:scrollable_positioned_list_extended/scrollable_positioned_list_extended.dart';
 
+import '../data/models/parse_paragraph_result.dart';
+
 export 'package:epubx/epubx.dart' hide Image;
 
 part '../epub_controller.dart';

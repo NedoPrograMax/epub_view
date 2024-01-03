@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:epub_view/src/data/epub_cfi_reader.dart';
+import 'package:epub_view/src/data/models/parse_paragraph_result.dart';
 import 'package:epub_view/src/helpers/extensions.dart';
 import 'package:epub_view/src/helpers/utils.dart';
 import 'package:html/dom.dart' as dom;
@@ -166,16 +167,4 @@ class EpubParser {
     wordsBefore += paragraph.symbolsCount;
     return paragraph;
   }
-}
-
-class ParseParagraphsResult {
-  ParseParagraphsResult(
-    this.flatParagraphs,
-    this.chapterIndexes,
-    this.hrefMap,
-  );
-
-  final List<Paragraph> flatParagraphs;
-  final List<int> chapterIndexes;
-  final Map<String, String> hrefMap;
 }
