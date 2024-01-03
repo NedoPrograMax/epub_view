@@ -5,12 +5,16 @@ class EpubController {
     required this.document,
     required this.lastResult,
     required this.onSave,
+    required this.onParsedSave,
+    this.parsedEpub,
     this.epubCfi,
   });
 
   Future<EpubBook> document;
   final Function(ReaderResult result) onSave;
   final ReaderResult lastResult;
+  final ParsedEpub? parsedEpub;
+  final Function(ParsedEpub parsedEpub) onParsedSave;
 
   final String? epubCfi;
 
@@ -135,7 +139,11 @@ class EpubController {
     isBookLoaded.value = false;
     try {
       loadingState.value = EpubViewLoadingState.loading;
+      /*  if (parsedEpub != null) {
+        _document = parsedEpub!.epubBook;
+      } else { */
       _document = await document;
+//      }
       await _epubViewState!._init();
       tableOfContentsListenable.value = tableOfContents();
       loadingState.value = EpubViewLoadingState.success;

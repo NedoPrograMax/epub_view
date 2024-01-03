@@ -8,6 +8,7 @@ import 'package:epub_view/src/data/models/chapter.dart';
 import 'package:epub_view/src/data/models/chapter_view_value.dart';
 import 'package:epub_view/src/data/models/last_place_model.dart';
 import 'package:epub_view/src/data/models/paragraph.dart';
+import 'package:epub_view/src/data/models/parsed_epub.dart';
 import 'package:epub_view/src/data/models/reader_result.dart';
 import 'package:epub_view/src/data/repository.dart';
 import 'package:epub_view/src/helpers/extensions.dart';
@@ -133,10 +134,19 @@ class _EpubViewState extends State<EpubView> {
       return true;
     }
     _chapters = EpubParser.parseChapters(_controller._document!);
-
-    final parseParagraphsResult =
-        await compute(EpubParser().parseParagraphs, _chapters);
+    late final ParseParagraphsResult parseParagraphsResult;
+    if (_controller.parsedEpub != null) {
+      parseParagraphsResult = _controller.parsedEpub!.parseParagraphsResult;
+    } else {
+      parseParagraphsResult =
+          await compute(EpubParser().parseParagraphs, _chapters);
+    }
     _paragraphs = parseParagraphsResult.flatParagraphs;
+    _controller.onParsedSave(
+      ParsedEpub(
+        parseParagraphsResult: parseParagraphsResult,
+      ),
+    );
     _syncParagraphs();
     _chapterIndexes.addAll(parseParagraphsResult.chapterIndexes);
     hrefMap = parseParagraphsResult.hrefMap;

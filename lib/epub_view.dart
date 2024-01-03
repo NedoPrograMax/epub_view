@@ -10,3 +10,5 @@ export 'src/helpers/epub_document.dart';
 
 export 'src/data/models/last_place_model.dart';
 export 'src/data/models/reader_result.dart';
+export 'src/data/models/parsed_epub.dart';
+export 'src/data/models/paragraph.dart';
