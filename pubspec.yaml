@@ -15,6 +15,7 @@ dependencies:
  
   equatable: ^2.0.5
   html: ^0.15.4
+  dio: ^5.4.0
  
   scrollable_positioned_list_extended: ^0.3.9
   collection: ^1.17.1

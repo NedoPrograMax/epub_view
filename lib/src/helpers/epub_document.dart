@@ -1,6 +1,7 @@
 // ignore: unnecessary_import
 import 'dart:typed_data';
 
+import 'package:dio/dio.dart';
 import 'package:epubx/epubx.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -25,6 +26,14 @@ class EpubDocument {
     final bytes = await file.readAsBytes();
     final book = compute<Uint8List, EpubBook>(
         (bytes) => EpubReader.readBook(bytes), bytes);
+    return book;
+  }
+
+  static Future<EpubBook> openUrl(String url) async {
+    final result = await Dio()
+        .get(url, options: Options(responseType: ResponseType.bytes));
+    final book = compute<Uint8List, EpubBook>(
+        (bytes) => EpubReader.readBook(bytes), result.data);
     return book;
   }
 }
