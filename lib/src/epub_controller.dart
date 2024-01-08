@@ -139,11 +139,11 @@ class EpubController {
     isBookLoaded.value = false;
     try {
       loadingState.value = EpubViewLoadingState.loading;
-      /*  if (parsedEpub != null) {
+      if (parsedEpub?.epubBook != null) {
         _document = parsedEpub!.epubBook;
-      } else { */
-      _document = await document;
-//      }
+      } else {
+        _document = await document;
+      }
       await _epubViewState!._init();
       tableOfContentsListenable.value = tableOfContents();
       loadingState.value = EpubViewLoadingState.success;

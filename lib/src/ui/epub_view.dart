@@ -142,13 +142,15 @@ class _EpubViewState extends State<EpubView> {
     } else {
       parseParagraphsResult =
           await compute(EpubParser().parseParagraphs, _chapters);
+      _controller.onParsedSave(
+        ParsedEpub(
+          parseParagraphsResult: parseParagraphsResult,
+          epubBook: _controller._document!,
+        ),
+      );
     }
     _paragraphs = parseParagraphsResult.flatParagraphs;
-    _controller.onParsedSave(
-      ParsedEpub(
-        parseParagraphsResult: parseParagraphsResult,
-      ),
-    );
+
     _syncParagraphs();
     _chapterIndexes.addAll(parseParagraphsResult.chapterIndexes);
     hrefMap = parseParagraphsResult.hrefMap;
