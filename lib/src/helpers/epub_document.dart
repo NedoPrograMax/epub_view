@@ -30,8 +30,12 @@ class EpubDocument {
   }
 
   static Future<EpubBook> openUrl(String url) async {
-    final result = await Dio()
-        .get(url, options: Options(responseType: ResponseType.bytes));
+    final result = await Dio().get(url,
+        options: Options(
+          responseType: ResponseType.bytes,
+          sendTimeout: const Duration(seconds: 120),
+          receiveTimeout: const Duration(seconds: 120),
+        ));
     final book = compute<Uint8List, EpubBook>(
         (bytes) => EpubReader.readBook(bytes), result.data);
     return book;
