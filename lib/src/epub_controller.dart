@@ -13,7 +13,7 @@ class EpubController {
   Future<EpubBook> document;
   final Function(ReaderResult result) onSave;
   final ReaderResult lastResult;
-  final Future<ParsedEpub>? parsedEpub;
+  final Future<ParsedEpub?>? parsedEpub;
   final Function(ParsedEpub parsedEpub) onParsedSave;
 
   final String? epubCfi;
