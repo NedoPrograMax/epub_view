@@ -2,18 +2,18 @@ part of 'ui/epub_view.dart';
 
 class EpubController {
   EpubController({
-    required this.document,
+    required this.computeDocument,
     required this.lastResult,
     required this.onSave,
     required this.onParsedSave,
-    this.parsedEpub,
+    this.computeParsedEpub,
     this.epubCfi,
   });
 
-  Future<EpubBook> document;
+  Future<EpubBook> Function() computeDocument;
   final Function(ReaderResult result) onSave;
   final ReaderResult lastResult;
-  final Future<ParsedEpub?>? parsedEpub;
+  final Future<ParsedEpub?> Function()? computeParsedEpub;
   final Function(ParsedEpub parsedEpub) onParsedSave;
 
   final String? epubCfi;
@@ -124,8 +124,8 @@ class EpubController {
 
   ReaderResult? getReaderResult() => _epubViewState?.countResult();
 
-  Future<void> loadDocument(Future<EpubBook> document) {
-    this.document = document;
+  Future<void> loadDocument(Future<EpubBook> Function() document) {
+    this.computeDocument = document;
     return _loadDocument(document);
   }
 
@@ -136,15 +136,15 @@ class EpubController {
     tableOfContentsListenable.dispose();
   }
 
-  Future<void> _loadDocument(Future<EpubBook> document) async {
+  Future<void> _loadDocument(Future<EpubBook> Function() document) async {
     isBookLoaded.value = false;
     try {
       loadingState.value = EpubViewLoadingState.loading;
-      _parsedEpub = await parsedEpub;
+      _parsedEpub = await computeParsedEpub?.call();
       if (_parsedEpub?.epubBook != null) {
         _document = _parsedEpub!.epubBook;
       } else {
-        _document = await document;
+        _document = await document();
       }
       await _epubViewState!._init();
       tableOfContentsListenable.value = tableOfContents();
@@ -167,7 +167,7 @@ class EpubController {
   void _attach(_EpubViewState epubReaderViewState) {
     _epubViewState = epubReaderViewState;
 
-    _loadDocument(document);
+    _loadDocument(computeDocument);
   }
 
   void _detach() {
