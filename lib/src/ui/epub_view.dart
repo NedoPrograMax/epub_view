@@ -137,8 +137,8 @@ class _EpubViewState extends State<EpubView> {
     }
     _chapters = EpubParser.parseChapters(_controller._document!);
     late final ParseParagraphsResult parseParagraphsResult;
-    if (_controller.parsedEpub != null) {
-      parseParagraphsResult = _controller.parsedEpub!.parseParagraphsResult;
+    if (_controller._parsedEpub != null) {
+      parseParagraphsResult = _controller._parsedEpub!.parseParagraphsResult;
     } else {
       parseParagraphsResult =
           await compute(EpubParser().parseParagraphs, _chapters);
