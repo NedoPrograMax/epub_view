@@ -37,14 +37,14 @@ class Paragraph {
       (value) => value.end < seenPart.start,
       orElse: () => seenPart,
     );
-    if (seenPart.start - lastLess.end < 0.01) {
+    if (seenPart.start - lastLess.end < 0.01 && lastLess != seenPart) {
       seenPart.start = lastLess.end;
     }
     final firstMore = _percents.firstWhere(
       (value) => value.start > seenPart.end,
       orElse: () => seenPart,
     );
-    if (firstMore.start - seenPart.end < 0.01) {
+    if (firstMore.start - seenPart.end < 0.01 && firstMore != seenPart) {
       seenPart.end = firstMore.start;
     }
 
