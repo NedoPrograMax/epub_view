@@ -30,6 +30,9 @@ class Paragraph {
   Duration setProgressAndReturnRestTimeLeft(
       Duration time, ParagraphProgressPercent seenPart) {
     // setting start and end to closest existint ones for better results
+    if (seenPart.end - seenPart.start == 0) {
+      return time;
+    }
     final lastLess = _percents.lastWhere(
       (value) => value.end < seenPart.start,
       orElse: () => seenPart,
@@ -66,8 +69,13 @@ class Paragraph {
     seenPartPercent -= instersectionsPercent;
     seenPartPercent = max(0, seenPartPercent);
     final timeForParagraph = countReadDurationOfParagraph(this);
+    if (timeForParagraph.inMilliseconds == 0) {
+      _percents.add(ParagraphProgressPercent(start: 0, end: 1));
+      return time;
+    }
     final timeForPercentMilis =
         timeForParagraph.inMilliseconds * seenPartPercent;
+
     var ourPercent = time.inMilliseconds / timeForPercentMilis;
 
     var combinedArea = ParagraphProgressPercent(
@@ -110,8 +118,12 @@ class Paragraph {
     return leftDuration;
   }
 
-  double get percent => _percents.fold(0,
-      (previousValue, element) => previousValue + element.end - element.start);
+  double get percent => min(
+      1,
+      _percents.fold(
+        0,
+        (previousValue, element) => previousValue + element.end - element.start,
+      ));
 }
 
 extension ParagraphsExtension on List<Paragraph> {
