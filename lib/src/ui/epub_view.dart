@@ -76,7 +76,7 @@ class _EpubViewState extends State<EpubView> {
   EpubChapterViewValue? _currentValue;
   final _chapterIndexes = <int>[];
   DateTime paragraphStartTime = DateTime.now();
-  DateTime lastChangeTime = DateTime.now();
+
   Duration paragraphDuration = Duration.zero;
   late final Repository repository;
   double paragraphStartPercent = 0;
@@ -170,8 +170,9 @@ class _EpubViewState extends State<EpubView> {
   void _syncParagraphs() {
     final lastParagraphs = _controller.lastResult.chapters;
     for (var lastParagraph in lastParagraphs) {
-      _paragraphs[(lastParagraph.index ?? 1) - 1].percent =
-          lastParagraph.percent ?? 0;
+      //TODO: how to sync local paragraph progress
+      /*  _paragraphs[(lastParagraph.index ?? 1) - 1].percent =
+          lastParagraph.percent ?? 0; */
     }
   }
 
@@ -184,16 +185,20 @@ class _EpubViewState extends State<EpubView> {
     //   });
   }
 
-  ItemPosition getCurrentPosition() {
+  List<ItemPosition> getCurrentPositions() {
     final positions = _itemPositionListener!.itemPositions.value;
     final sortedPositions = positions
         .sorted((a, b) => a.itemLeadingEdge.compareTo(b.itemLeadingEdge));
-    final topMostPosition = sortedPositions.firstWhere(
-      (element) => element.itemLeadingEdge <= 0 && element.itemTrailingEdge > 0,
-      orElse: () => sortedPositions.last,
-    );
+    final onScreenPositions = sortedPositions
+        .where(
+          (element) =>
+              (element.itemLeadingEdge >= 0 && element.itemLeadingEdge < 1) ||
+              (element.itemTrailingEdge > 0 && element.itemTrailingEdge <= 1) ||
+              (element.itemLeadingEdge < 0 && element.itemTrailingEdge >= 1),
+        )
+        .toList();
 
-    return topMostPosition;
+    return onScreenPositions;
   }
 
   ReaderResult? countResult() {
@@ -202,52 +207,32 @@ class _EpubViewState extends State<EpubView> {
       return null;
     }
 
-    final position = getCurrentPosition();
+    final positions = getCurrentPositions();
     final chapterIndex = _getChapterIndexBy(
-      positionIndex: position.index,
-      trailingEdge: position.itemTrailingEdge,
-      leadingEdge: position.itemLeadingEdge,
+      positionIndex: positions.first.index,
+      trailingEdge: positions.first.itemTrailingEdge,
+      leadingEdge: positions.first.itemLeadingEdge,
     );
-    final paragraphIndex = _getParagraphIndexBy(
-      positionIndex: position.index,
-      trailingEdge: position.itemTrailingEdge,
-      leadingEdge: position.itemLeadingEdge,
-    );
-    final paragraphAbsIndex = _getAbsParagraphIndexBy(
-      positionIndex: position.index,
-      trailingEdge: position.itemTrailingEdge,
-      leadingEdge: position.itemLeadingEdge,
-    );
-    final paragraph = _paragraphs[paragraphAbsIndex];
-    final isTheSameParagraph =
-        _currentValue?.chapterNumber == chapterIndex + 1 &&
-            _currentValue?.paragraphNumber == paragraphIndex + 1;
+    final paragraphsIndexes = _getAbsParagraphsIndexesBy(positions);
+    final paragraphsAbsIndexes = _getAbsParagraphsIndexesBy(positions);
+    final paragraphs = [
+      for (var index in paragraphsAbsIndexes) _paragraphs[index]
+    ];
 
-    if (!isTheSameParagraph) {
-      paragraphDuration = countReadDurationOfParagraph(paragraph);
-      paragraphStartTime = lastChangeTime;
-      paragraphStartPercent = paragraph.percent;
-    }
     _currentValue = EpubChapterViewValue(
       chapter: chapterIndex >= 0 ? _chapters[chapterIndex] : null,
       chapterNumber: chapterIndex + 1,
-      paragraphNumber: paragraphIndex + 1,
-      position: position,
-    );
-
-    final now = DateTime.now();
-    final timePercent = min(
-      1.0,
-      now.difference(paragraphStartTime).inMilliseconds /
-              paragraphDuration.inMilliseconds +
-          paragraphStartPercent,
+      paragraphNumber: paragraphsIndexes.first + 1,
+      position: positions.first,
     );
 
     final viewPercent = (_currentValue?.progress ?? 0.0) / 100.0;
-    final currentPercentWithTime = min(timePercent, viewPercent);
-    paragraph.percent = max(paragraph.percent, currentPercentWithTime);
 
-    lastChangeTime = DateTime.now();
+    final positionsSeenParts = positions.map((e) => e.seenPart).toList();
+    paragraphs.countProgress(
+        DateTime.now().difference(paragraphStartTime), positionsSeenParts);
+
+    paragraphStartTime = DateTime.now();
     final currentScrollPosition = getCurrentScrollPosition();
     final isTheEnd = currentScrollPosition?.atEdge == true &&
         currentScrollPosition?.pixels == currentScrollPosition?.maxScrollExtent;
@@ -256,7 +241,7 @@ class _EpubViewState extends State<EpubView> {
         : countUserProgress(
             _paragraphs,
             chapterNumber: chapterIndex,
-            paragraphNumber: paragraphAbsIndex,
+            paragraphNumber: paragraphsAbsIndexes.first,
             lastPercent: viewPercent,
           );
     /* final userProgress = max(
@@ -272,10 +257,10 @@ class _EpubViewState extends State<EpubView> {
 
     // +10k is needed so the percent is > 0. then it -
     final convertedPercent =
-        convertProgressToSmallModel(position.itemLeadingEdge);
+        convertProgressToSmallModel(positions.first.itemLeadingEdge);
     final countedLastPlace = LastPlaceModel(
       percent: convertedPercent,
-      index: position.index + 1,
+      index: positions.first.index + 1,
     );
     /*  final lastPlace = repository.lastReadResult.lastPlace == null ||
             countedLastPlace.isAfter(repository.lastReadResult.lastPlace!)
@@ -447,6 +432,18 @@ class _EpubViewState extends State<EpubView> {
     return index - 1;
   }
 
+  List<int> _getParagraphsIndexesBy(List<ItemPosition> positions) {
+    final indexes = positions
+        .map((e) => _getAbsParagraphIndexBy(
+              positionIndex: e.index,
+              leadingEdge: e.itemLeadingEdge,
+              trailingEdge: e.itemTrailingEdge,
+            ))
+        .toList();
+
+    return indexes;
+  }
+
   int _getParagraphIndexBy({
     required int positionIndex,
     double? trailingEdge,
@@ -467,18 +464,24 @@ class _EpubViewState extends State<EpubView> {
     return posIndex - _chapterIndexes[index];
   }
 
+  List<int> _getAbsParagraphsIndexesBy(List<ItemPosition> positions) {
+    final indexes = positions
+        .map((e) => _getAbsParagraphIndexBy(
+              positionIndex: e.index,
+              leadingEdge: e.itemLeadingEdge,
+              trailingEdge: e.itemTrailingEdge,
+            ))
+        .toList();
+
+    return indexes;
+  }
+
   int _getAbsParagraphIndexBy({
     required int positionIndex,
     double? trailingEdge,
     double? leadingEdge,
   }) {
     int posIndex = positionIndex;
-    /*   if (trailingEdge != null &&
-        leadingEdge != null &&
-        trailingEdge < _minTrailingEdge &&
-        leadingEdge < _minLeadingEdge) {
-      posIndex += 1;
-    } */
 
     return posIndex;
   }
@@ -710,7 +713,7 @@ class _EpubViewState extends State<EpubView> {
 
   void positionScrollListener() async {
     if (!didScrollToLastPlace) {
-      final position = getCurrentPosition();
+      final position = getCurrentPositions().first;
       if (position.index == scrollToPlace?.index &&
           scrollToPlace?.index != null) {
         didScrollToLastPlace = true;

@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:math';
 
 import 'package:collection/collection.dart';
@@ -160,9 +161,9 @@ class EpubParser {
     final paragraph = Paragraph(
       element: element,
       chapterIndex: chapterIndex,
-      percent: 0,
       symbolsCount: countSymbolsInElement(element),
       wordsBefore: wordsBefore,
+      percents: SplayTreeSet.from([]),
     );
     wordsBefore += paragraph.symbolsCount;
     return paragraph;
