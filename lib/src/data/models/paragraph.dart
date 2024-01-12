@@ -69,12 +69,13 @@ class Paragraph {
     seenPartPercent -= instersectionsPercent;
     seenPartPercent = max(0, seenPartPercent);
     final timeForParagraph = countReadDurationOfParagraph(this);
-    if (timeForParagraph.inMilliseconds == 0) {
+
+    final timeForPercentMilis =
+        timeForParagraph.inMilliseconds * seenPartPercent;
+    if (timeForPercentMilis == 0) {
       _percents.add(ParagraphProgressPercent(start: 0, end: 1));
       return time;
     }
-    final timeForPercentMilis =
-        timeForParagraph.inMilliseconds * seenPartPercent;
 
     var ourPercent = time.inMilliseconds / timeForPercentMilis;
 
