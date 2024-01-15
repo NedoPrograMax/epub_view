@@ -5,11 +5,13 @@ class ReaderResult {
   final List<LastPlaceModel> chapters;
   final double lastProgress;
   final double realProgress;
+  final int charactersRead;
 
   ReaderResult({
     required this.lastPlace,
     required this.chapters,
     required this.lastProgress,
     required this.realProgress,
+    required this.charactersRead,
   });
 }

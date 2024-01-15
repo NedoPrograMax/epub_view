@@ -1,13 +1,14 @@
 import 'dart:math';
 
 import 'package:epub_view/src/data/models/paragraph.dart';
+import 'package:epub_view/src/data/models/real_progress_result.dart';
 import 'package:html/dom.dart';
 
 Duration countReadDurationOfParagraph(Paragraph paragraph) {
   final symbolsInParagraph = paragraph.symbolsCount;
   const symbolsPerSecond = 25;
   final normalReadSeconds = symbolsInParagraph / symbolsPerSecond;
-  const coef = 1;
+  const coef = 0.375;
   final coefReadSeconds = normalReadSeconds * coef;
   final coedReadMilliseconds = coefReadSeconds * 1000;
   return Duration(milliseconds: coedReadMilliseconds.round());
@@ -42,7 +43,7 @@ double countUserProgress(
   return readPercent;
 }
 
-double countRealProgress(List<Paragraph> paragraphs) {
+RealProgressResult countRealProgress(List<Paragraph> paragraphs) {
   double allSymbols = 0;
   double readSymbols = 0;
   for (int i = 0; i < paragraphs.length; i++) {
@@ -53,7 +54,10 @@ double countRealProgress(List<Paragraph> paragraphs) {
   }
 
   final readPercent = readSymbols / allSymbols;
-  return max(readPercent, 0.001);
+  return RealProgressResult(
+    charactersRead: readSymbols.toInt(),
+    progress: max(readPercent, 0.001),
+  );
 }
 
 int getSymbolsCountsInNode(Node node) {

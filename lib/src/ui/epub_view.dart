@@ -270,14 +270,15 @@ class _EpubViewState extends State<EpubView> {
             countedLastPlace.isAfter(repository.lastReadResult.lastPlace!)
         ? countedLastPlace
         : repository.lastReadResult.lastPlace; */
-
+    final realProgressResult = countRealProgress(
+      _paragraphs,
+    );
     return ReaderResult(
       lastPlace: countedLastPlace,
       chapters: _paragraphs.removeZeros().toLastModels(),
       lastProgress: countedProgress,
-      realProgress: countRealProgress(
-        _paragraphs,
-      ),
+      realProgress: realProgressResult.progress,
+      charactersRead: realProgressResult.charactersRead,
     );
   }
 
