@@ -127,7 +127,7 @@ class EpubController {
   ReaderResult? getReaderResult() => _epubViewState?.countResult();
 
   Future<void> loadDocument(Future<EpubBook> Function() document) {
-    this.computeDocument = document;
+    computeDocument = document;
     return _loadDocument(document);
   }
 
