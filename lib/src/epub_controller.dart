@@ -6,7 +6,6 @@ class EpubController {
     required this.lastResult,
     required this.onSave,
     required this.onParsedSave,
-    required this.onError,
     this.computeParsedEpub,
     this.epubCfi,
   });
@@ -16,7 +15,6 @@ class EpubController {
   final ReaderResult lastResult;
   final Future<ParsedEpub?> Function()? computeParsedEpub;
   final Function(ParsedEpub parsedEpub) onParsedSave;
-  final void Function(Exception e) onError;
 
   final String? epubCfi;
 

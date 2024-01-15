@@ -106,7 +106,6 @@ class _EpubViewState extends State<EpubView> {
           break;
         case EpubViewLoadingState.error:
           SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-            Navigator.of(context).pop();
             widget.onDocumentError?.call(_loadingError);
           });
 
