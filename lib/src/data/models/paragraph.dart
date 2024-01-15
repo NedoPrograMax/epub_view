@@ -163,7 +163,7 @@ extension ParagraphsExtension on List<Paragraph> {
     for (var i = 0; i < length; i++) {
       final timeLeft =
           this[i].setProgressAndReturnRestTimeLeft(time, seenParts[i]);
-      timeMillis -= timeLeft.inMilliseconds;
+      timeMillis = timeLeft.inMilliseconds;
       if (timeMillis <= 0) {
         break;
       }
