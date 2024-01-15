@@ -6,6 +6,7 @@ class EpubController {
     required this.lastResult,
     required this.onSave,
     required this.onParsedSave,
+    required this.onError,
     this.computeParsedEpub,
     this.epubCfi,
   });
@@ -15,6 +16,7 @@ class EpubController {
   final ReaderResult lastResult;
   final Future<ParsedEpub?> Function()? computeParsedEpub;
   final Function(ParsedEpub parsedEpub) onParsedSave;
+  final void Function(Exception e) onError;
 
   final String? epubCfi;
 
@@ -136,7 +138,9 @@ class EpubController {
     tableOfContentsListenable.dispose();
   }
 
-  Future<void> _loadDocument(Future<EpubBook> Function() document) async {
+  Future<void> _loadDocument(
+    Future<EpubBook> Function() document,
+  ) async {
     isBookLoaded.value = false;
     try {
       loadingState.value = EpubViewLoadingState.loading;
@@ -149,6 +153,8 @@ class EpubController {
       await _epubViewState!._init();
       tableOfContentsListenable.value = tableOfContents();
       loadingState.value = EpubViewLoadingState.success;
+    } on DioException catch (e) {
+      onError(e);
     } catch (error) {
       _epubViewState!._loadingError = error is Exception
           ? error
