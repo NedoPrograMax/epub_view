@@ -27,6 +27,16 @@ class Paragraph {
         index: index + 1,
       );
 
+  void setPercent(double percent) {
+    _percents.clear();
+    _percents.add(
+      ParagraphProgressPercent(
+        start: 0,
+        end: min(1, percent),
+      ),
+    );
+  }
+
   Duration setProgressAndReturnRestTimeLeft(
       Duration time, ParagraphProgressPercent seenPart) {
     // setting start and end to closest existint ones for better results

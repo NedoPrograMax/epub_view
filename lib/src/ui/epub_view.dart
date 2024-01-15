@@ -175,9 +175,8 @@ class _EpubViewState extends State<EpubView> {
   void _syncParagraphs() {
     final lastParagraphs = _controller.lastResult.chapters;
     for (var lastParagraph in lastParagraphs) {
-      //TODO: how to sync local paragraph progress
-      /*  _paragraphs[(lastParagraph.index ?? 1) - 1].percent =
-          lastParagraph.percent ?? 0; */
+      _paragraphs[(lastParagraph.index ?? 1) - 1]
+          .setPercent(lastParagraph.percent ?? 0);
     }
   }
 
