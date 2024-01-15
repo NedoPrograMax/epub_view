@@ -161,8 +161,8 @@ extension ParagraphsExtension on List<Paragraph> {
   void countProgress(Duration time, List<ParagraphProgressPercent> seenParts) {
     var timeMillis = time.inMilliseconds;
     for (var i = 0; i < length; i++) {
-      final timeLeft =
-          this[i].setProgressAndReturnRestTimeLeft(time, seenParts[i]);
+      final timeLeft = this[i].setProgressAndReturnRestTimeLeft(
+          Duration(milliseconds: timeMillis), seenParts[i]);
       timeMillis = timeLeft.inMilliseconds;
       if (timeMillis <= 0) {
         break;
