@@ -77,7 +77,7 @@ class Paragraph {
       return time;
     }
 
-    var ourPercent = time.inMilliseconds / timeForPercentMilis;
+    var ourPercent = time.inMilliseconds / timeForParagraph.inMilliseconds;
 
     var combinedArea = ParagraphProgressPercent(
       start: seenPart.start,
