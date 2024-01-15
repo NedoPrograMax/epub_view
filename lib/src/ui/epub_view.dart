@@ -18,6 +18,7 @@ import 'package:epub_view/src/ui/chapter_divider.dart';
 import 'package:epub_view/src/ui/reader_test_selection_toolbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:html/dom.dart' as dom;
@@ -104,7 +105,11 @@ class _EpubViewState extends State<EpubView> {
           widget.onDocumentLoaded?.call(_controller._document!);
           break;
         case EpubViewLoadingState.error:
-          widget.onDocumentError?.call(_loadingError);
+          SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+            Navigator.of(context).pop();
+            widget.onDocumentError?.call(_loadingError);
+          });
+
           break;
       }
 

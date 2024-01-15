@@ -153,11 +153,6 @@ class EpubController {
       await _epubViewState!._init();
       tableOfContentsListenable.value = tableOfContents();
       loadingState.value = EpubViewLoadingState.success;
-    } on DioException catch (e) {
-      if (_epubViewState?.context != null) {
-        Navigator.of(_epubViewState!.context).pop();
-      }
-      onError(e);
     } catch (error) {
       _epubViewState!._loadingError = error is Exception
           ? error
