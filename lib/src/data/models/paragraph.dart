@@ -14,12 +14,14 @@ class Paragraph {
     this.symbolsCount = 0,
     required SplayTreeSet<ParagraphProgressPercent> percents,
     required this.wordsBefore,
+    this.whenEnteredScreen,
   }) : _percents = percents;
 
   final dom.Element element;
   final int chapterIndex;
   final int symbolsCount;
   final int wordsBefore;
+  DateTime? whenEnteredScreen;
   final SplayTreeSet<ParagraphProgressPercent> _percents;
 
   LastPlaceModel toLastPlace(int index) => LastPlaceModel(
@@ -39,10 +41,15 @@ class Paragraph {
 
   Duration setProgressAndReturnRestTimeLeft(
       Duration time, ParagraphProgressPercent seenPart) {
-    // setting start and end to closest existint ones for better results
     if (seenPart.end - seenPart.start == 0) {
       return time;
     }
+    //disabling the "fast scroll" flow, so it doesnt count anything
+    if (whenEnteredScreen != null &&
+        DateTime.now().difference(whenEnteredScreen!).inMilliseconds < 1000) {
+      return time;
+    }
+    // setting start and end to closest existint ones for better results
     final lastLess = _percents.lastWhere(
       (value) => value.end < seenPart.start,
       orElse: () => seenPart,

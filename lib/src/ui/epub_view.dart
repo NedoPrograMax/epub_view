@@ -78,6 +78,7 @@ class _EpubViewState extends State<EpubView> {
   EpubChapterViewValue? _currentValue;
   final _chapterIndexes = <int>[];
   DateTime paragraphStartTime = DateTime.now();
+  List<Paragraph> lastParagraphs = [];
 
   Duration paragraphDuration = Duration.zero;
   late final Repository repository;
@@ -222,7 +223,12 @@ class _EpubViewState extends State<EpubView> {
     final paragraphs = [
       for (var index in paragraphsAbsIndexes) _paragraphs[index]
     ];
-
+    for (var i = 0; i < paragraphs.length; i++) {
+      if (!lastParagraphs.contains(paragraphs[i])) {
+        paragraphs[i].whenEnteredScreen = DateTime.now();
+      }
+    }
+    lastParagraphs = paragraphs;
     _currentValue = EpubChapterViewValue(
       chapter: chapterIndex >= 0 ? _chapters[chapterIndex] : null,
       chapterNumber: chapterIndex + 1,
