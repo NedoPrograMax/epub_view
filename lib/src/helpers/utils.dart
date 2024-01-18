@@ -8,7 +8,7 @@ Duration countReadDurationOfParagraph(Paragraph paragraph) {
   final symbolsInParagraph = paragraph.symbolsCount;
   const symbolsPerSecond = 25;
   final normalReadSeconds = symbolsInParagraph / symbolsPerSecond;
-  const coef = 0.375;
+  const coef = 0.2;
   final coefReadSeconds = normalReadSeconds * coef;
   final coedReadMilliseconds = coefReadSeconds * 1000;
   return Duration(milliseconds: coedReadMilliseconds.round());

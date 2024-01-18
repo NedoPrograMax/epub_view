@@ -54,8 +54,12 @@ class Paragraph {
     }
     late final SplayTreeSet<ParagraphProgressPercent> percents;
     //disabling the "fast scroll" flow, so it doesnt count anything
+    final now = DateTime.now();
     if (whenEnteredScreen != null &&
-        DateTime.now().difference(whenEnteredScreen!).inMilliseconds < 1000) {
+        now
+                .difference(whenEnteredScreen!)
+                .compareTo(const Duration(milliseconds: 1000)) <
+            0) {
       percents = _tempPercents;
     } else {
       if (_tempPercents.isNotEmpty) {
