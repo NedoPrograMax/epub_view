@@ -15,7 +15,8 @@ class Paragraph {
     required SplayTreeSet<ParagraphProgressPercent> percents,
     required this.wordsBefore,
     this.whenEnteredScreen,
-  }) : _percents = percents;
+  })  : _percents = percents,
+        _tempPercents = SplayTreeSet.from([]);
 
   final dom.Element element;
   final int chapterIndex;
@@ -23,6 +24,7 @@ class Paragraph {
   final int wordsBefore;
   DateTime? whenEnteredScreen;
   final SplayTreeSet<ParagraphProgressPercent> _percents;
+  final SplayTreeSet<ParagraphProgressPercent> _tempPercents;
 
   LastPlaceModel toLastPlace(int index) => LastPlaceModel(
         percent: percent,
@@ -44,28 +46,42 @@ class Paragraph {
     if (seenPart.end - seenPart.start == 0) {
       return time;
     }
+    if (symbolsCount == 0) {
+      return time;
+    }
+    if (percent == 1.0) {
+      return time;
+    }
+    late final SplayTreeSet<ParagraphProgressPercent> percents;
     //disabling the "fast scroll" flow, so it doesnt count anything
     if (whenEnteredScreen != null &&
         DateTime.now().difference(whenEnteredScreen!).inMilliseconds < 1000) {
-      return time;
+      percents = _tempPercents;
+    } else {
+      if (_tempPercents.isNotEmpty) {
+        _percents.clear();
+        _percents.addAll(_tempPercents);
+        _tempPercents.clear();
+      }
+      percents = _percents;
     }
     // setting start and end to closest existint ones for better results
-    final lastLess = _percents.lastWhere(
+    final lastLess = percents.lastWhere(
       (value) => value.end < seenPart.start,
       orElse: () => seenPart,
     );
     if (seenPart.start - lastLess.end < 0.01 && lastLess != seenPart) {
-      seenPart.start = lastLess.end;
+      seenPart = seenPart.copyWith(start: lastLess.end);
     }
-    final firstMore = _percents.firstWhere(
+    final firstMore = percents.firstWhere(
       (value) => value.start > seenPart.end,
       orElse: () => seenPart,
     );
     if (firstMore.start - seenPart.end < 0.01 && firstMore != seenPart) {
-      seenPart.end = firstMore.start;
+      seenPart = seenPart.copyWith(end: firstMore.start);
     }
 
-    final intersections = _percents
+    final intersections = percents
         .where((element) =>
             (element.start <= seenPart.end &&
                 element.start >= seenPart.start) ||
@@ -90,7 +106,6 @@ class Paragraph {
     final timeForPercentMilis =
         timeForParagraph.inMilliseconds * seenPartPercent;
     if (timeForPercentMilis == 0) {
-      _percents.add(ParagraphProgressPercent(start: 0, end: 1));
       return time;
     }
 
@@ -112,12 +127,12 @@ class Paragraph {
         combinedArea = ParagraphProgressPercent(
             start: min(combinedArea.start, firstStart.start),
             end: max(firstStart.end, combinedArea.end));
-        _percents.remove(firstStart);
+        percents.remove(firstStart);
       } else if (distanceToFirstStart <= ourPercent) {
         combinedArea = ParagraphProgressPercent(
             start: min(combinedArea.start, firstStart.start),
             end: max(firstStart.end, combinedArea.end));
-        _percents.remove(firstStart);
+        percents.remove(firstStart);
         ourPercent -= distanceToFirstStart;
       } else {
         combinedArea = ParagraphProgressPercent(
@@ -129,7 +144,7 @@ class Paragraph {
       intersectionIndex++;
     }
     if (combinedArea.start != combinedArea.end) {
-      _percents.add(combinedArea);
+      percents.add(combinedArea);
     }
     final timeLeftMilis = max(timeForPercentMilis * ourPercent, 0.0);
     final leftDuration = Duration(milliseconds: timeLeftMilis.toInt());
@@ -142,6 +157,17 @@ class Paragraph {
         0,
         (previousValue, element) => previousValue + element.end - element.start,
       ));
+
+  void enterScreen() {
+    whenEnteredScreen = DateTime.now();
+    _tempPercents.clear();
+    _tempPercents.addAll(_percents);
+  }
+
+  void leaveScreen() {
+    whenEnteredScreen = null;
+    _tempPercents.clear();
+  }
 }
 
 extension ParagraphsExtension on List<Paragraph> {

@@ -225,9 +225,15 @@ class _EpubViewState extends State<EpubView> {
     ];
     for (var i = 0; i < paragraphs.length; i++) {
       if (!lastParagraphs.contains(paragraphs[i])) {
-        paragraphs[i].whenEnteredScreen = DateTime.now();
+        paragraphs[i].enterScreen();
       }
     }
+    for (var i = 0; i < lastParagraphs.length; i++) {
+      if (!paragraphs.contains(lastParagraphs[i])) {
+        lastParagraphs[i].leaveScreen();
+      }
+    }
+
     lastParagraphs = paragraphs;
     _currentValue = EpubChapterViewValue(
       chapter: chapterIndex >= 0 ? _chapters[chapterIndex] : null,
